@@ -91,7 +91,7 @@ function recuperaEmpresaEstab($access, $banco) {
   // Se tudo der errado
   else {
     $temp["estabelecimento"] = "00";
-    $temp["estabelecimento"] = "0";
+    $temp["empresa"] = "0";
   }
 
   return $temp;

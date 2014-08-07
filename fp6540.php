@@ -3,15 +3,16 @@
 include_once './lib/connection.php';
 include_once './lib/functions.php';
 
-$banco = "rur";
+$banco = "urb";
 
 $db = new connection($banco);
 
+$num = 1;
+
 // Roda todas as tabelas
 // Vai demorar muito
-//for ($i = 1; $i <= 12; $i++) {
-$num = 1;
-for ($i = 1; $i <= 1; $i++) {
+for ($i = 1; $i <= 12; $i++) {
+//for ($i = 1; $i <= 1; $i++) {
   if ($i <= 9) {
     $mes = "0" . $i;
     $tabela = "ds0400" . $i;
@@ -22,7 +23,7 @@ for ($i = 1; $i <= 1; $i++) {
 
 
 
-  $result = $db->query("SELECT * FROM $tabela ORDER BY acss ASC LIMIT 500 OFFSET 0");
+  $result = $db->query("SELECT * FROM $tabela WHERE acss = '00000125' ORDER BY acss ASC ");
 
   while ($row = pg_fetch_object($result)) {
 
@@ -65,19 +66,46 @@ for ($i = 1; $i <= 1; $i++) {
      */
     $quantidade = "";
 
-    echo "movtclc;";                                 // Constante
-    echo $num . ";";                                 // Número do registro
-    echo $emp_estab["empresa"] . ";";                // Número da empresa
-    echo $emp_estab["estabelecimento"] . ";";        // Número do estabelecimento
-    echo removeDigito($acss) . ";";                  // Matrícula sem dígito
-    echo $mes . ";";                                 // Mês de referencia
-    echo $row->exer . ";";                           // Ano de referencia
-    echo $dt_pag . $row->exer . ";";                 // Data de pagamento
-    echo $tipo_folha . ";";                          // Tipo de folha
-    echo $num_parcela . ";";                         // Número da parcela
-    echo deParaVerbas($row->cdnn) . ";";             // Código do evento
-    echo $quantidade . ";";                          // Quantidade
+    /**
+     * Deixando a base como 00. Verificar impacto
+     */
+    $base = "00";
 
+    $valor = str_replace('', '', $row->valo);
+    if ($valor < 0) {
+      $valor = $valor * -1;
+    } else {
+
+    }
+
+    /**
+     * Sinal do valor - ou +
+     * Deixado em branco
+     */
+    $sinal = "";
+
+    $ano = $row->exer;
+    $result2 = $db->query("SELECT * FROM ds041 WHERE acss = '$acss' AND exer = '$ano' AND mesf = '$mes'");
+    $row2 = pg_fetch_object($result2);
+    $sal_total = $row2->msal + $row2->csal;
+
+    echo "movtoclc;";                                          // Constante
+    echo $num . ";";                                          // Número do registro
+    echo $emp_estab["empresa"] . ";";                         // Número da empresa
+    echo $emp_estab["estabelecimento"] . ";";                 // Número do estabelecimento
+    echo removeDigito($acss) . ";";                           // Matrícula sem dígito
+    echo $mes . ";";                                          // Mês de referencia
+    echo $ano . ";";                                          // Ano de referencia
+    echo $dt_pag . $row->exer . ";";                          // Data de pagamento
+    echo $tipo_folha . ";";                                   // Tipo de folha
+    echo $num_parcela . ";";                                  // Número da parcela
+    echo $row->cdnn . ";";                                    // Código do evento
+    echo $quantidade . ";";                                   // Quantidade
+    echo $base . ";";                                         // Base de calculo
+    echo number_format($valor, 2, '', '') . ";";              // Valor
+    echo $sinal . ";";                                        // Sinal do valor
+    echo number_format($sal_total / 220, 2, '', '') . ";";    // Salario hora do funcionário
+    echo number_format($sal_total, 2, '', '');                // Salario atual do funcionario
     echo "<br />";
     $num++;
   }
