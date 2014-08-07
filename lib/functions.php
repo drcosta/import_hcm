@@ -135,3 +135,12 @@ function removeDigito($acesso) {
 
   return intval($mat);
 }
+
+function deParaVerbas($verba) {
+
+  if ($verba == "167") {
+    return "001";
+  } else {
+    return "000";
+  }
+}
