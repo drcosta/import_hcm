@@ -136,11 +136,128 @@ function removeDigito($acesso) {
   return intval($mat);
 }
 
-function deParaVerbas($verba) {
+function getDV($acesso) {
+  $dv = "";
+  $tam = strlen($acesso) - 1;
+  $dv = $acesso[$tam];
 
-  if ($verba == "167") {
-    return "001";
-  } else {
-    return "000";
+  return $dv;
+}
+
+function getEndereco($acesso, $banco) {
+  $db = new connection($banco);
+
+  $result = $db->query("SELECT * FROM ds01c WHERE acss = '$acesso'");
+  $row = pg_fetch_object($result);
+
+  $end["endereco"] = trim($row->nder);
+  $end["tp_ref"] = "";
+  $end["bairro"] = trim($row->nde2);
+  $end["cep"] = trim($row->ncep) . trim($row->ccep);
+  $end["cidade"] = trim($row->muni);
+  $end["estado"] = trim($row->esta);
+  $end["ide_num"] = trim($row->nide);
+
+
+
+  $oexp = trim($row->oexp);
+
+  if (strripos($oexp, "SP")) {
+    $end["ide_est"] = "SP";
   }
+
+  if (strripos($oexp, "AC")) {
+    $end["ide_est"] = "AC";
+  } else if (strripos($oexp, "AL")) {
+    $end["ide_est"] = "AL";
+  } else if (strripos($oexp, "AP")) {
+    $end["ide_est"] = "AP";
+  } else if (strripos($oexp, "AM")) {
+    $end["ide_est"] = "AM";
+  } else if (strripos($oexp, "BA")) {
+    $end["ide_est"] = "BA";
+  } else if (strripos($oexp, "CE")) {
+    $end["ide_est"] = "CE";
+  } else if (strripos($oexp, "DF")) {
+    $end["ide_est"] = "DF";
+  } else if (strripos($oexp, "ES")) {
+    $end["ide_est"] = "ES";
+  } else if (strripos($oexp, "GO")) {
+    $end["ide_est"] = "GO";
+  } else if (strripos($oexp, "MA")) {
+    $end["ide_est"] = "MA";
+  } else if (strripos($oexp, "MT")) {
+    $end["ide_est"] = "MT";
+  } else if (strripos($oexp, "MS")) {
+    $end["ide_est"] = "MS";
+  } else if (strripos($oexp, "MG")) {
+    $end["ide_est"] = "MG";
+  } else if (strripos($oexp, "PA")) {
+    $end["ide_est"] = "PA";
+  } else if (strripos($oexp, "PB")) {
+    $end["ide_est"] = "PB";
+  } else if (strripos($oexp, "PR")) {
+    $end["ide_est"] = "PR";
+  } else if (strripos($oexp, "PE")) {
+    $end["ide_est"] = "PE";
+  } else if (strripos($oexp, "PI")) {
+    $end["ide_est"] = "PI";
+  } else if (strripos($oexp, "RJ")) {
+    $end["ide_est"] = "RJ";
+  } else if (strripos($oexp, "RN")) {
+    $end["ide_est"] = "RN";
+  } else if (strripos($oexp, "RS")) {
+    $end["ide_est"] = "RS";
+  } else if (strripos($oexp, "RO")) {
+    $end["ide_est"] = "RO";
+  } else if (strripos($oexp, "RR")) {
+    $end["ide_est"] = "RR";
+  } else if (strripos($oexp, "SC")) {
+    $end["ide_est"] = "SC";
+  } else if (strripos($oexp, "SP")) {
+    $end["ide_est"] = "SP";
+  } else if (strripos($oexp, "SE")) {
+    $end["ide_est"] = "SE";
+  } else if (strripos($oexp, "TO")) {
+    $end["ide_est"] = "TO";
+  } else {
+    $end["ide_est"] = trim($row->esta);
+  }
+
+  if (strripos($oexp, "PC")) {
+    $end["ide_orm"] = "PC";
+  } else if (strripos($oexp, "RG")) {
+    $end["ide_orm"] = "RG";
+  } else if (strripos($oexp, "SEDPF")) {
+    $end["ide_orm"] = "SEDPF";
+  } else if (strripos($oexp, "SSP")) {
+    $end["ide_orm"] = "SSP";
+  } else {
+    $end["ide_orm"] = "SSP";
+  }
+
+  if ($row->telt != "" && $row->zona != "" && $row->seca != "" && $row->mzon != "" && $row->ezon != "") {
+    $end["telt_num"] = trim($row->telt);
+    $end["telt_zona"] = trim($row->zona);
+    $end["telt_seca"] = trim($row->seca);
+    $end["telt_cida"] = trim($row->mzon);
+    $end["telt_esta"] = trim($row->ezon);
+  } else {
+    $end["telt_num"] = "";
+    $end["telt_zona"] = "";
+    $end["telt_seca"] = "";
+    $end["telt_cida"] = "";
+    $end["telt_esta"] = "";
+  }
+
+  if ($row->espr != "") {
+    $end["ctps_esta"] = $row->espr;
+  } else {
+    $end["ctps_esta"] = trim($row->esta);
+  }
+
+
+
+
+  return $end;
 }
