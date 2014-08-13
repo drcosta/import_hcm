@@ -261,3 +261,79 @@ function getEndereco($acesso, $banco) {
 
   return $end;
 }
+
+function getInsa($acesso, $banco) {
+  $db = new connection($banco);
+
+  $result = $db->query("SELECT * from dm01k WHERE acss = '$acesso'");
+  $row = pg_fetch_object($result);
+
+  if ($banco == "urb") {
+    if ($row->nbfl[10] == 1) {
+      $total["in"] = "S";
+      $total["in_nv"] = "1";
+    } else if ($row->nbfl[1] == 1) {
+      $total["in"] = "S";
+      $total["in_nv"] = "2";
+    } else {
+      $total["in"] = "N";
+      $total["in_nv"] = "";
+    }
+  } else if ($banco == "urb_rv") {
+    if ($row->nbfl[0] == 1) {
+      $total["in"] = "S";
+      $total["in_nv"] = "2";
+    } else {
+      $total["in"] = "N";
+      $total["in_nv"] = "";
+    }
+  } else if ($banco == "rur") {
+    if ($row->nbfl[3] == 1) {
+      $total["in"] = "S";
+      $total["in_nv"] = "1";
+    } else {
+      $total["in"] = "N";
+      $total["in_nv"] = "";
+    }
+  } else if ($banco == "rur_rv") {
+    if ($row->nbfl[0] == 1) {
+      $total["in"] = "S";
+      $total["in_nv"] = "1";
+    } else {
+      $total["in"] = "N";
+      $total["in_nv"] = "";
+    }
+  }
+
+  return $total;
+}
+
+function getPeric($acesso, $banco) {
+  $db = new connection($banco);
+
+  $result = $db->query("SELECT * from dm01k WHERE acss = '$acesso'");
+  $row = pg_fetch_object($result);
+
+  if ($banco == "urb") {
+    if ($row->nbfl[2] == 1) {
+      $total["per"] = "S";
+      $total["per_nv"] = "3";
+    } else {
+      $total["per"] = "N";
+      $total["per_nv"] = "";
+    }
+  } else if ($banco == "urb_rv") {
+    if ($row->nbfl[3] == 1) {
+      $total["per"] = "S";
+      $total["per_nv"] = "3";
+    } else {
+      $total["per"] = "N";
+      $total["per_nv"] = "";
+    }
+  } else {
+    $total["per"] = "N";
+    $total["per_nv"] = "";
+  }
+
+  return $total;
+}
