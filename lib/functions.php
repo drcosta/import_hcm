@@ -111,6 +111,22 @@ function formatNumber($num) {
   }
 }
 
+function converteData2($data) {
+  $ano = "";
+  $mes = "";
+  $dia = "";
+
+  for ($i = 0; $i <= 3; $i++) {
+    $ano .= $data[$i];
+  }
+
+  $mes = $data[4] . $data[5];
+
+  $dia = $data[6] . $data[7];
+
+  return $dia . "-" . $mes . "-" . $ano;
+}
+
 function converteData($data) {
   $ano = "";
   $mes = "";
@@ -336,4 +352,31 @@ function getPeric($acesso, $banco) {
   }
 
   return $total;
+}
+
+function getSindicato($nsin, $banco) {
+  $sind = "";
+  if ($banco == "urb" && $nsin == "01") {
+    $sind = "1";
+  } else if ($banco == "urb" && ($nsin == "02" || $nsin == "12" || $nsin == "14")) {
+    $sind = "2";
+  } else if ($banco == "urb" && $nsin == "04") {
+    $sind = "3";
+  } else if ($banco == "urb" && $nsin == "11") {
+    $sind = "4";
+  } else if ($banco == "urb" && $nsin == "13") {
+    $sind = "5";
+  } else if ($banco == "urb_rv" && $nsin == "01") {
+    $sind = "7";
+  } else if ($banco == "urb_rv" && $nsin == "02") {
+    $sind = "8";
+  } else if ($banco == "urb_rv" && ($nsin == "03" || $nsin == "04")) {
+    $sind = "2";
+  } else if ($banco == "rur") {
+    $sind = "1";
+  } else if ($banco == "rur_rv") {
+    $sind = "8";
+  }
+
+  return $sind;
 }

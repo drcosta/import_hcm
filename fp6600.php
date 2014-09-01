@@ -3,12 +3,11 @@
 include_once './lib/connection.php';
 include_once './lib/functions.php';
 
-$banco = "urb";
+$banco = "rur";
 
 $db = new connection($banco);
 
 $result = $db->query("SELECT * FROM dgs01 WHERE stat <> 'x' ORDER BY acss ASC");
-$num = 1;
 
 if ($emp_estab["estabelecimento"] == "61") {
   $cat_sal = "2";
@@ -57,7 +56,7 @@ while ($row = pg_fetch_object($result)) {
   echo $cat_sal . ";";                                  // Código da categoria salarial
   echo $nome . ";";                                     // Nome
   echo converteData($row->admi) . ";";                  // Data de admissao
-  echo $num . ";";                                      // Número de registro do funcionário
+  echo $acss . ";";                                     // Número de registro do funcionário
   echo $sexo . ";";                                     // Sexo
   echo $st_civil . ";";                                 // Estado civil
   echo $end["endereco"] . ";";                          // Endereco
@@ -102,6 +101,7 @@ while ($row = pg_fetch_object($result)) {
   $dt_vencto_prorrog = "";
   $num_seq_reg = "";
   $cart_saude = "";
+  $zip_code = "";
 
   $ctps_num = "";
   $ctps_ser = "";
@@ -162,7 +162,7 @@ while ($row = pg_fetch_object($result)) {
   echo $ctps_ser . ";";                                 // Carteira de trabalho - Série
   echo $ctps_mod . ";";                                 // Carteira de trabalho - Modelo
   echo $end["ctps_esta"] . ";";                         // Carteira de trabalho - Estado emissor
-  echo $end["cep"] . ";";                               // Zip code
+  echo $zip_code . ";";                                 // Zip code
   echo $cutis . ";";                                    // Cutis
   echo $cabelo . ";";                                   // Cabelo
   echo $olhos . ";";                                    // Olhos
@@ -214,13 +214,13 @@ while ($row = pg_fetch_object($result)) {
   }
 
   $indic_estu = "N";                                    // N - Não
-  $uni_fed_emp = "MG";
+  $uni_fed_emp = "";
   $mat_inss = "";
   $dt_ult_exem = "";
   $g_sanguineo = "05";                                  // 05 - Não informado
   $fator_rh = "3";                                      // 3 - Não informado
   $inic_doador = "N";                                   // N - Não
-  $dt_vencto_fam = "";
+  $dt_vencto_fam = "31122014";
   $pl_lotacao = "1";
   $uni_lotacao = "110100000";
   $c_custo = "001";
@@ -236,7 +236,7 @@ while ($row = pg_fetch_object($result)) {
   $vinculo_fun = "1";                                   // 1 - Com vínculo empregatício
   $t_mao_de_obra = "DIR";                               // DIR - Direta
   $cod_nivel = "0";                                     // Código do nível: 0 - Zé Ruela
-  $sal_autal = str_replace('.', '', $msal + $csal) . "00" . ";";
+  $sal_autal = str_replace('.', '', $msal + $csal) . "00";
   $tab_sal = "N";                                       // N - Não
   $cod_tab_sal = "";
   $fx_tab_sal = "";
@@ -247,28 +247,38 @@ while ($row = pg_fetch_object($result)) {
   $ms = $row2->msal;
   $cs = $row2->csal;
 
-  if ($ms > 0 && $cs > 0) {
-    $result2 = $db->query("SELECT * FROM ds041 WHERE acss = '$acss' AND msal = '$ms' AND csal = '$cs' ORDER BY acss ASC, exer ASC, mesf ASC");
-    $row2 = pg_fetch_object($result2);
-    $dt_ult_sal = "01" . $row2->mesf . $row2->exer;
-  } else {
-    $dt_ult_sal = "";
+  if ($ms == "") {
+    $ms = 0;
   }
 
-
+  if ($cs == "") {
+    $cs = 0;
+  }
+  $result2 = $db->query("SELECT * FROM ds041 WHERE acss = '$acss' AND msal = '$ms' AND csal = '$cs' ORDER BY acss ASC, exer ASC, mesf ASC");
+  $row2 = pg_fetch_object($result2);
+  $dt_ult_sal = "01" . $row2->mesf . $row2->exer;
 
   $motivo_alt = "10";                                   // 10 - Acordo coletivo
-
+//  $result2 = $db->query("SELECT * FROM ds041 WHERE acss = '$acss' ORDER BY acss ASC, exer ASC, mesf ASC");
+//  $row2 = pg_fetch_object($result2);
+//  $ms = $row2->msal;
+//  $cs = $row2->csal;
+//  $sal_admin = str_replace('.', '', $ms + $cs) . "00";
   $result2 = $db->query("SELECT * FROM ds041 WHERE acss = '$acss' ORDER BY acss ASC, exer ASC, mesf ASC");
-  $row2 = pg_fetch_object($result2);
-  $ms = $row2->msal;
-  $cs = $row2->csal;
-  $sal_admin = str_replace('.', '', $ms + $cs) . "00" . ";";
+  while ($row2 = pg_fetch_object($result2)) {
+    if ($row2->msal > 0) {
+      $ms = $row2->msal;
+      $cs = $row2->csal;
+      $sal_admin = str_replace('.', '', $ms + $cs) . "00";
+      break;
+    }
+  }
+
 
   $sal_simulado = "";
   $optante_FGTS = "S";                                  // S - Sim
   $cod_fgts = "";
-  $tipo_admi_fgts = "2";                                // 2 - Reemprego
+  $tipo_admi_fgts = "1";                                // 2 - Reemprego
   $indicador_reco_fgts = "S";                           // S - Sim
   $num_meses_fgts = "";
   $indicador_reco_inss = "S";                           // S - Sim
@@ -347,7 +357,7 @@ while ($row = pg_fetch_object($result)) {
   } else {
     $result2 = $db->query("SELECT * FROM dgs15 WHERE nbco = '$nbco'");
     $row2 = pg_fetch_object($result2);
-    if ($row2->stat != "x") {
+    if ($row2->stat != "x" && trim($row2->nrbc) != "" && trim($row2->nrag) != "") {
       $form_pagto = "01";
       $cod_banco = $row2->nrbc;
       $cod_agencia = $row2->nrag;
@@ -365,10 +375,14 @@ while ($row = pg_fetch_object($result)) {
   $cod_conta_comp_fgts = "";
   $cod_dig_comp_fgts = "";
   $forma_pagto_fgts = "";
-  $regiao_salarial = "";
+  $regiao_salarial = "00";
   $cod_uni_negocio = "";
   $indi_cooperado = "";
   $cod_sefip = "1";
+
+  if ($num_sal_fam == 0) {
+    $dt_vencto_fam = "";
+  }
 
   echo "funciona" . ";";                                // Constante
   echo "3" . ";";                                       // Tipo de informacao
@@ -443,7 +457,7 @@ while ($row = pg_fetch_object($result)) {
   //
   //Tipo 4
 
-  $ncta = trim($row->ntca);
+  $ncta = trim($row->ncta);
 
   $explode = explode('-', $ncta);
   list($cc_corrente, $cc_digito) = $explode;
@@ -540,6 +554,37 @@ while ($row = pg_fetch_object($result)) {
   //
   // Tipo 5
 
+  $dt_ult_aval = "";
+  $per_adian_conc = "";
+  $dt_term_contr = "";
+  $dt_ult_alt_end = "";
+  $num_mes_trab_ant = "";
+  $dt_expe_func = "";
+  $dt_vencto_hab = "";
+  $local_pagto = "";
+  $contrib_sindical = "S";                              // Contribuição sindical em dia
+  $cgc_cei_caged = "";
+  $func_adm_caged = "";
+  $cod_adm_caged = "";
+  $func_dem_caged = "";
+  $cod_dem_caged = "";
+  $dt_cart_trab = "";
+  $dt_val_cart_trab = "";
+  $dt_pis_pasep = "";
+  $cod_img = "";
+  $compensacao = "";
+  $compesa_mes = "";
+  $qtd_dias_cont_exp = "";
+  $cod_local_marca = "";
+  $cod_fornecedor = "";
+  $cod_class_func_pt_elec = "";
+
+  if ($row->stat == "D" && $row->caus == 6) {
+    $dt_trans = converteData($row->dqit);
+  } else {
+    $dt_trans = "";
+  }
+
   echo "funciona" . ";";                                // Constante
   echo "5" . ";";                                       // Tipo de informacao
   echo $emp_estab["empresa"] . ";";                     // Codigo da empresa
@@ -547,8 +592,212 @@ while ($row = pg_fetch_object($result)) {
   echo removeDigito($acss) . ";";                       // Matrícula sem dígito
   echo getDV($acss) . ";";                              // Dígito da Matricula
   echo $nome . ";";                                     // Nome abreviado do funcionário
+  echo $dt_trans . ";";                                 // Data de admissão de transferência
+  echo $dt_ult_aval . ";";                               // Data da última avaliação do funcionário
+  echo $per_adian_conc . ";";                           // Percentual de adiantamento a ser concedido
+  echo $dt_term_contr . ";";                            // Data de término do contrato
+  echo $dt_ult_alt_end . ";";                           // Data da última alteração do endereço do funcionário
+  echo $num_mes_trab_ant . ";";                         // Número de meses no trabalho anterior
+  echo $dt_expe_func . ";";                             // Data de experiência do funcionário
+  echo $dt_vencto_hab . ";";                            // Data de vencimento da habilitação
+  echo $local_pagto . ";";                              // Local de pagamento
+  echo $contrib_sindical . ";";                         // Contribuição sindical em dia
+  echo $cgc_cei_caged . ";";                            // CGC/CEI (Caged)
+  echo $func_adm_caged . ";";                           // Funcionário admitido (Caged)
+  echo $cod_adm_caged . ";";                            // Código admissão (caged)
+  echo $func_dem_caged . ";";                           // Funcionário demitido (caged)
+  echo $cod_dem_caged . ";";                            // Código demissão (caged)
+  echo converteData(trim($row3->dcpr)) . ";";           // Data da carteira de trabalho
+  echo $dt_val_cart_trab . ";";                         // Data de validade da carteira de trabalho
+  echo $dt_pis_pasep . ";";                             // Data pis/pasep
+  echo $cod_img . ";";                                  // Código da imagem
+  echo $compensacao . ";";                              // Compesação
+  echo $compesa_mes . ";";                              // Compensação mês
+  echo $qtd_dias_cont_exp . ";";                        // Quantidade de dias contrato experiência
+  echo $cod_local_marca . ";";                          // Código do local de marcação
+  echo $cod_fornecedor . ";";                           // Código do fornecedor
+  echo $cod_class_func_pt_elec . ";";                   // Código da classe de funcionários para ponto eletrônico
+  echo $uso_dtsul . ";";                                // Uso futuro
+  echo $uso_dtsul . ";";                                // Uso futuro
+  echo $uso_dtsul . ";";                                // Uso futuro
+  echo $uso_dtsul . ";";                                // Uso futuro
+  echo $uso_dtsul . ";";                                // Uso futuro
+  echo $uso_dtsul . ";";                                // Uso futuro
+  echo $uso_dtsul . ";";                                // Uso futuro
+  echo $uso_dtsul . ";";                                // Uso futuro
+  echo $uso_dtsul . ";";                                // Uso futuro
+  echo $uso_dtsul;                                      // Uso futuro
 
   echo "<br />";
+
+  // Fim Tipo 5
+  //
+  // Tipo 6
+
+  $cart_trab_ant = "";
+  $cart_trab_ant_ser = "";
+  $pis_ant = "";
+  $num_fax = "";
+  $telex = "";
+  $end_elec_internet = "";
+  $indic_tipo_visto = "1";                              // 1 - Sem visto
+  $cod_agen_noc = "0";                                  // Nunca esteve esposto
+  $desc_rever_sindi = "S";
+  $localidade = "1";
+  $cod_fpas = "0";
+
+  $cod_sind = getSindicato($row->nsin, $banco);
+
+  echo "funciona" . ";";                                // Constante
+  echo "6" . ";";                                       // Tipo de informacao
+  echo $emp_estab["empresa"] . ";";                     // Codigo da empresa
+  echo $emp_estab["estabelecimento"] . ";";             // Codigo do estabelecimento
+  echo removeDigito($acss) . ";";                       // Matrícula sem dígito
+  echo getDV($acss) . ";";                              // Dígito da Matricula
+  echo $cart_trab_ant . ";";                            // Carteira de trabalho anterior- número
+  echo $cart_trab_ant_ser . ";";                        // Carteira de trabalho anteiror - série
+  echo $pis_ant . ";";                                  // Pis anterior
+  echo $num_fax . ";";                                   // Número do fax
+  echo $telex . ";";                                     // Telex
+  echo $end_elec_internet . ";";                        // Endereço eletrônico na internet
+  echo $end["estado"] . ";";                            // Código unidade federação nascimento
+  echo $end["cidade"] . ";";                            // Cidade de nascimento do funcionario
+  echo $indic_tipo_visto . ";";                         // Indicador tipo visto estrangeiro
+  echo $uso_dtsul . ";";                                // Carteira de identidade estrangeiro - Data validade
+  echo $uso_dtsul . ";";                                // Emissão identidade
+  echo $uso_dtsul . ";";                                // Validade id estadual
+  echo $uso_dtsul . ";";                                // Código da jornada de trabalho [1]
+  echo $uso_dtsul . ";";                                // Código do intervalo de refeição [1]
+  echo $uso_dtsul . ";";                                // Código da jornada de trabalho [2]
+  echo $uso_dtsul . ";";                                // Código do intervalo de refeição [2]
+  echo $uso_dtsul . ";";                                // Código da jornada de trabalho [3]
+  echo $uso_dtsul . ";";                                // Código do intervalo de refeição [3]
+  echo $uso_dtsul . ";";                                // Código da jornada de trabalho [4]
+  echo $uso_dtsul . ";";                                // Código do intervalo de refeição [4]
+  echo $uso_dtsul . ";";                                // Código da jornada de trabalho [5]
+  echo $uso_dtsul . ";";                                // Código do intervalo de refeição [5]
+  echo $cod_agen_noc . ";";                             // Código de exposição agentes nocivos
+  echo $desc_rever_sindi . ";";                         // Desconto reversão sindical
+  echo $pais . ";";                                     // Páis localidade
+  echo $localidade . ";";                               // Localidade
+  echo $cod_fpas . ";";                                 // Código FPAS
+  echo $uso_dtsul . ";";                                // Código tomador de serviço
+  echo $cod_sind;                                       // Código
+
+  echo "<br />";
+
+  // Fim Tipo 6
+  //
+  // Tipo 7
+
+  $cat_trab_tab1 = "101";                               // 101 - Empregado - Geral
+  $idica_adm = "1";                                     // 1 - Normal
+  $nat_atividade = "1";                                 // 1 - Trabalhador urbano
+  $reside_exterior = "N";
+  $cas_brasi_estra = "N";
+  $filhos_com_bras = "N";
+
+  $muni_nasc_ibge = "06507"; // < < ----------- VER COMO FAZER
+  $tp_logradouro = "R";  // < < ----------- VER COMO FAZER
+  $muni_end_ibge = "06507";  // < < ----------- VER COMO FAZER
+
+  echo "funciona" . ";";                                // Constante
+  echo "7" . ";";                                       // Tipo de informacao
+  echo $emp_estab["empresa"] . ";";                     // Codigo da empresa
+  echo $emp_estab["estabelecimento"] . ";";             // Codigo do estabelecimento
+  echo removeDigito($acss) . ";";                       // Matrícula sem dígito
+  echo getDV($acss) . ";";                              // Dígito da Matricula
+  echo $cat_trab_tab1 . ";";                            // Categoria trabalhador - tab. 1 eSocial
+  echo $idica_adm . ";";                                // indicativo admissão
+  echo $nat_atividade . ";";                            // Natureza atividade
+  echo $pais . ";";                                     // Pais nacionalidade
+  echo $muni_nasc_ibge . ";";                           // Município nascimento - tab. ibge
+  echo $uso_dtsul . ";";                                // RIC - Registro de identidade civil
+  echo $uso_dtsul . ";";                                // UF RIC - registro de identidade civil
+  echo $uso_dtsul . ";";                                // Cidade RIC - Registro de identidade civil
+  echo $uso_dtsul . ";";                                // Orgão emissor ric - registro de identidade civil
+  echo $uso_dtsul . ";";                                // Expedição ric - registro de identidade civil
+  echo $uso_dtsul . ";";                                // Uso interno datasul
+  echo $uso_dtsul . ";";                                // Uso interno datasul
+  echo $uso_dtsul . ";";                                // Categoria CNH - carteira nacional de habilitação
+  echo $uso_dtsul . ";";                                // UF CNH - Carteira nacional de habilitação
+  echo $uso_dtsul . ";";                                // Orgão emissor cnh - Carteira nacional de habilitação
+  echo $uso_dtsul . ";";                                // Expedição CNH - carteira nacional de habilitação
+  echo $uso_dtsul . ";";                                // Expedição RNE - registro nacional de estrageiro
+  echo $uso_dtsul . ";";                                // Orgão emissor rne - registro nacional de estrangeiro
+  echo $tp_logradouro . ";";                            // Tipo de logradouro - tab. 20 esocial
+  echo $muni_end_ibge . ";";                            // Município endereço - tab. ibge
+  echo $uso_dtsul . ";";                                // E-mail principal
+  echo $uso_dtsul . ";";                                // E-mail alternativo
+  echo $uso_dtsul . ";";                                // Uso interno datasul
+  echo $uso_dtsul . ";";                                // Uso interno datasul
+  echo $reside_exterior . ";";                          // Reside no exterior
+  echo $uso_dtsul . ";";                                // Código endereçamento postal quando reside no exterior
+  echo $uso_dtsul . ";";                                // Data de chegada ao Brasil se estrangeiro
+  echo $uso_dtsul . ";";                                // Data de naturalização
+  echo $cas_brasi_estra . ";";                          // Casado(a) com brasileiro(a) se estrangeiro
+  echo $filhos_com_bras . ";";                          // Tem filho(s) com brasileiro(a)
+  echo $uso_dtsul . ";";                                // CAEPF - Código atividade específica pesso física
+  echo $uso_dtsul . ";";                                // Uso interno datasul
+  echo $uso_dtsul;                                      // Processo judicial
+
+  echo "<br />";
+
+  // Fim Tipo 7
+  //
+  // Tipo 8
+
+  echo "funciona" . ";";                                // Constante
+  echo "8" . ";";                                       // Tipo de informacao
+  echo $emp_estab["empresa"] . ";";                     // Codigo da empresa
+  echo $emp_estab["estabelecimento"] . ";";             // Codigo do estabelecimento
+  echo removeDigito($acss) . ";";                       // Matrícula sem dígito
+  echo getDV($acss) . ";";                              // Dígito da Matricula
+  echo $uso_dtsul . ";";                                // Natureza do estágio
+  echo $uso_dtsul . ";";                                // Nível do estágio
+  echo $uso_dtsul . ";";                                // Código da PF que representa o supervisor do estágio
+  echo $uso_dtsul . ";";                                // Área de autação do estágiario
+  echo $uso_dtsul . ";";                                // Número apólice de seguro estágio
+  echo $uso_dtsul . ";";                                // Código da PJ que represnta a instituição ensino estágio
+  echo $uso_dtsul;                                      // Código da PJ que represnta o agnte integração estágio
+
+  echo "<br />";
+
+  // Fim Tipo 8
+  //
+  // Tipo 9
+
+  $tp_adm_esocial = "1";                                // 1 - Admissão
+  $reg_traba = "1";                                     // CLT - Consolidação das Leis de Trabalho
+  $reg_prev = "1";                                      // 1 - RGPS - Regime geral da previdência social
+  $reg_jornada = "1";                                   // 1 - Submetidos a horário de trabalho (cap. II da CLT)
+  $contra_trab_temp = "N";
+
+  echo "funciona" . ";";                                // Constante
+  echo "9" . ";";                                       // Tipo de informacao
+  echo $emp_estab["empresa"] . ";";                     // Codigo da empresa
+  echo $emp_estab["estabelecimento"] . ";";             // Codigo do estabelecimento
+  echo removeDigito($acss) . ";";                       // Matrícula sem dígito
+  echo getDV($acss) . ";";                              // Dígito da Matricula
+  echo $tp_adm_esocial . ";";                           // Tipo admissão esocial
+  echo $reg_traba . ";";                                // Regime trabalhista
+  echo $reg_prev . ";";                                 // Regime previdênciario
+  echo $reg_jornada . ";";                              // Regime jornada
+  echo $uso_dtsul . ";";                                // Descrição salário variável
+  echo $uso_dtsul . ";";                                // CNPJ empregador anterior
+  echo $uso_dtsul . ";";                                // Matrícula esocial anterior
+  echo $uso_dtsul . ";";                                // Início vínculo
+  echo $uso_dtsul . ";";                                // CNPJ empresa cedente
+  echo $uso_dtsul . ";";                                // Matrícula esocial empresa cedente
+  echo $uso_dtsul . ";";                                // Data admissão empresa cedente
+  echo $uso_dtsul . ";";                                // Ônus da cessão
+  echo $contra_trab_temp . ";";                         // Contratação de trabalhor temporário
+  echo $uso_dtsul . ";";                                // Motivo contratação
+  echo $uso_dtsul . ";";                                // Matrícula esocial do funcionário substituído
+  echo $uso_dtsul . ";";                                // CPF do funcionário substituído
+  echo $uso_dtsul;                                      // Matrícula esocial
+
+  echo "<br /><br />";
 }
 ?>
 
