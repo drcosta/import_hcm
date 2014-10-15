@@ -196,7 +196,13 @@ while ($row = pg_fetch_object($result)) {
       }
     }
 
-    $dt_cert = date('dmY', strtotime(converteData2($row->admi) . ' + 1 days'));
+    if (dif_data($row->admi, $row2->dtnc) < 1) {
+
+      $dt_cert = date('dmY', strtotime(converteData2($row->admi) . ' + 1 days'));
+    } else {
+      $dt_cert = date('dmY', strtotime(converteData2($row2->dtnc) . ' + 1 days'));
+    }
+
 
 
     echo "depend" . ";";                                           // Constante
@@ -227,7 +233,7 @@ while ($row = pg_fetch_object($result)) {
     echo $branco . ";";                                       // Código de registro no sistema externo
     echo $est_cur_sup . ";";                                  // Estudante de curso superior
     echo $comp_fre_esc . ";";                                 // Comprovante de frequencia escolar
-    echo "01102014" . ";";                                       // Data da apresentação Comprovante de frequencia escolar
+    echo "01102014" . ";";                                    // Data da apresentação Comprovante de frequencia escolar
     echo $branco . ";";                                       // Nome da Mãe
     echo $branco . ";";                                       // CPF Titular responsável
     echo $branco . ";";                                       // Número da pessoa física
