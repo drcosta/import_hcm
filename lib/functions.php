@@ -34,57 +34,57 @@ function recuperaEmpresaEstab($access, $banco) {
     $estab .= $ccst[$i];
   }
 
-  if ($banco == "rur") {
+  if ($banco == "RUR") {
     $temp["empresa"] = "1";
-  } else if ($banco == "rur_rv") {
+  } else if ($banco == "RUR_RV") {
     $temp["empresa"] = "1";
   }
 
   //RUR
-  if ($banco == "rur" && $estab == "001") {
+  if ($banco == "RUR" && $estab == "001") {
     $temp["estabelecimento"] = "13";
-  } else if ($banco == "rur" && $estab == "002") {
+  } else if ($banco == "RUR" && $estab == "002") {
     $temp["estabelecimento"] = "12";
-  } else if ($banco == "rur" && $estab == "003") {
+  } else if ($banco == "RUR" && $estab == "003") {
     $temp["estabelecimento"] = "17";
   }
   // RUR_RV
-  else if ($banco == "rur_rv" && $estab == "001") {
+  else if ($banco == "RUR_RV" && $estab == "001") {
     $temp["estabelecimento"] = "14";
-  } else if ($banco == "rur_rv" && $estab == "002") {
+  } else if ($banco == "RUR_RV" && $estab == "002") {
     $temp["estabelecimento"] = "15";
   }
   //URB
-  else if ($banco == "urb" && $estab == "001") {
+  else if ($banco == "URB" && $estab == "001") {
     $temp["estabelecimento"] = "13";
     $temp["empresa"] = "1";
-  } else if ($banco == "urb" && $estab == "002") {
+  } else if ($banco == "URB" && $estab == "002") {
     $temp["estabelecimento"] = "12";
     $temp["empresa"] = "1";
-  } else if ($banco == "urb" && $estab == "015") {
+  } else if ($banco == "URB" && $estab == "015") {
     $temp["estabelecimento"] = "17";
     $temp["empresa"] = "1";
-  } else if ($banco == "urb" && $estab == "005") {
+  } else if ($banco == "URB" && $estab == "005") {
     $temp["estabelecimento"] = "21";
     $temp["empresa"] = "2";
-  } else if ($banco == "urb" && $estab == "008") {
+  } else if ($banco == "URB" && $estab == "008") {
     $temp["estabelecimento"] = "22";
     $temp["empresa"] = "2";
-  } else if ($banco == "urb" && $estab == "013") {
+  } else if ($banco == "URB" && $estab == "013") {
     $temp["estabelecimento"] = "23";
     $temp["empresa"] = "2";
-  } else if ($banco == "urb" && $estab == "003") {
+  } else if ($banco == "URB" && $estab == "003") {
     $temp["estabelecimento"] = "61";
     $temp["empresa"] = "6";
   }
   // URB_RV
-  else if ($banco == "urb_rv" && $estab == "001") {
+  else if ($banco == "URB_RV" && $estab == "001") {
     $temp["estabelecimento"] = "14";
     $temp["empresa"] = "1";
-  } else if ($banco == "urb_rv" && $estab == "003") {
+  } else if ($banco == "URB_RV" && $estab == "003") {
     $temp["estabelecimento"] = "15";
     $temp["empresa"] = "1";
-  } else if ($banco == "urb_rv" && $estab == "002") {
+  } else if ($banco == "URB_RV" && $estab == "002") {
     $temp["estabelecimento"] = "24";
     $temp["empresa"] = "2";
   }
@@ -140,7 +140,32 @@ function converteData($data) {
 
   $dia = $data[6] . $data[7];
 
+  if ($mes > 12) {
+    $mes = 12;
+  }
+
+  if ($dia > 31) {
+    $dia = 31;
+  }
+
   return $dia . $mes . $ano;
+}
+
+function dif_data($data_inicial, $data_final) {
+
+  $time_inicial = strtotime($data_inicial);
+  $time_final = strtotime($data_final);
+
+  $diferenca = $time_final - $time_inicial;
+  $dias = (int) floor($diferenca / (60 * 60 * 24));
+
+  $dias++;
+
+//  if ($dias > 0) {
+  return $dias;
+//  } else {
+//    return 1;
+//  }
 }
 
 function removeDigito($acesso) {
@@ -149,7 +174,13 @@ function removeDigito($acesso) {
     $mat .= $acesso[$i];
   }
 
-  return intval($mat);
+  if (strlen($mat) <= 7) {
+    for ($i = strlen($mat); $i <= 7; $i++) {
+      $mat = "0" . $mat;
+    }
+  }
+
+  return $mat;
 }
 
 function getDV($acesso) {
@@ -166,15 +197,21 @@ function getEndereco($acesso, $banco) {
   $result = $db->query("SELECT * FROM ds01c WHERE acss = '$acesso'");
   $row = pg_fetch_object($result);
 
-  $end["endereco"] = trim($row->nder);
+  $end["endereco"] = str_replace(';', '', trim($row->nder));
   $end["tp_ref"] = "";
   $end["bairro"] = trim($row->nde2);
   $end["cep"] = trim($row->ncep) . trim($row->ccep);
   $end["cidade"] = trim($row->muni);
-  $end["estado"] = trim($row->esta);
+
   $end["ide_num"] = trim($row->nide);
 
-
+  if (trim($row->esta) != "") {
+    $end["estado"] = trim($row->esta);
+  } if (trim($row->esta) == "RG") {
+    $end["estado"] = "MG";
+  } else {
+    $end["estado"] = "MG";
+  }
 
   $oexp = trim($row->oexp);
 
@@ -236,8 +273,10 @@ function getEndereco($acesso, $banco) {
     $end["ide_est"] = "SE";
   } else if (strripos($oexp, "TO")) {
     $end["ide_est"] = "TO";
-  } else {
+  } else if (trim($row->esta) != "" AND trim($row->esta) != "RG") {
     $end["ide_est"] = trim($row->esta);
+  } else {
+    $end["ide_est"] = "MG";
   }
 
   if (strripos($oexp, "PC")) {
@@ -266,12 +305,20 @@ function getEndereco($acesso, $banco) {
     $end["telt_esta"] = "";
   }
 
-  if ($row->espr != "") {
-    $end["ctps_esta"] = $row->espr;
-  } else {
+  if (trim($row->espr) != "") {
+    $end["ctps_esta"] = trim($row->espr);
+  } else if (trim($row->esta) != "") {
     $end["ctps_esta"] = trim($row->esta);
+  } else {
+    $end["ctps_esta"] = "MG";
   }
 
+
+  if ($end["ide_num"] == "") {
+    $end["ide_num"] = "";
+    $end["ide_orm"] = "";
+    $end["ide_est"] = "";
+  }
 
 
 
@@ -284,7 +331,7 @@ function getInsa($acesso, $banco) {
   $result = $db->query("SELECT * from dm01k WHERE acss = '$acesso'");
   $row = pg_fetch_object($result);
 
-  if ($banco == "urb") {
+  if ($banco == "URB") {
     if ($row->nbfl[10] == 1) {
       $total["in"] = "S";
       $total["in_nv"] = "1";
@@ -295,7 +342,7 @@ function getInsa($acesso, $banco) {
       $total["in"] = "N";
       $total["in_nv"] = "";
     }
-  } else if ($banco == "urb_rv") {
+  } else if ($banco == "URB_RV") {
     if ($row->nbfl[0] == 1) {
       $total["in"] = "S";
       $total["in_nv"] = "2";
@@ -303,7 +350,7 @@ function getInsa($acesso, $banco) {
       $total["in"] = "N";
       $total["in_nv"] = "";
     }
-  } else if ($banco == "rur") {
+  } else if ($banco == "RUR") {
     if ($row->nbfl[3] == 1) {
       $total["in"] = "S";
       $total["in_nv"] = "1";
@@ -311,7 +358,7 @@ function getInsa($acesso, $banco) {
       $total["in"] = "N";
       $total["in_nv"] = "";
     }
-  } else if ($banco == "rur_rv") {
+  } else if ($banco == "RUR_RV") {
     if ($row->nbfl[0] == 1) {
       $total["in"] = "S";
       $total["in_nv"] = "1";
@@ -330,7 +377,7 @@ function getPeric($acesso, $banco) {
   $result = $db->query("SELECT * from dm01k WHERE acss = '$acesso'");
   $row = pg_fetch_object($result);
 
-  if ($banco == "urb") {
+  if ($banco == "URB") {
     if ($row->nbfl[2] == 1) {
       $total["per"] = "S";
       $total["per_nv"] = "3";
@@ -338,7 +385,7 @@ function getPeric($acesso, $banco) {
       $total["per"] = "N";
       $total["per_nv"] = "";
     }
-  } else if ($banco == "urb_rv") {
+  } else if ($banco == "URB_RV") {
     if ($row->nbfl[3] == 1) {
       $total["per"] = "S";
       $total["per_nv"] = "3";
@@ -356,25 +403,25 @@ function getPeric($acesso, $banco) {
 
 function getSindicato($nsin, $banco) {
   $sind = "";
-  if ($banco == "urb" && $nsin == "01") {
+  if ($banco == "URB" && $nsin == "01") {
     $sind = "1";
-  } else if ($banco == "urb" && ($nsin == "02" || $nsin == "12" || $nsin == "14")) {
+  } else if ($banco == "URB" && ($nsin == "02" || $nsin == "12" || $nsin == "14")) {
     $sind = "2";
-  } else if ($banco == "urb" && $nsin == "04") {
+  } else if ($banco == "URB" && $nsin == "04") {
     $sind = "3";
-  } else if ($banco == "urb" && $nsin == "11") {
+  } else if ($banco == "URB" && $nsin == "11") {
     $sind = "4";
-  } else if ($banco == "urb" && $nsin == "13") {
+  } else if ($banco == "URB" && $nsin == "13") {
     $sind = "5";
-  } else if ($banco == "urb_rv" && $nsin == "01") {
+  } else if ($banco == "URB_RV" && $nsin == "01") {
     $sind = "7";
-  } else if ($banco == "urb_rv" && $nsin == "02") {
+  } else if ($banco == "URB_RV" && $nsin == "02") {
     $sind = "8";
-  } else if ($banco == "urb_rv" && ($nsin == "03" || $nsin == "04")) {
+  } else if ($banco == "URB_RV" && ($nsin == "03" || $nsin == "04")) {
     $sind = "2";
-  } else if ($banco == "rur") {
+  } else if ($banco == "RUR") {
     $sind = "1";
-  } else if ($banco == "rur_rv") {
+  } else if ($banco == "RUR_RV") {
     $sind = "8";
   }
 

@@ -3,14 +3,19 @@
 include_once './lib/connection.php';
 include_once './lib/functions.php';
 
-$banco = "rur";
+$banco = "RUR";
 
 $db = new connection($banco);
-
-$result = $db->query("SELECT * FROM dgs01 WHERE stat <> '' AND stat <> 'x' AND stat <> 'X' AND stat <> 'P' ORDER BY acss ASC LIMIT 500");
+$result = $db->query("SELECT * FROM dgs01 WHERE ccst NOT LIKE '000%' AND ccst NOT LIKE '005%' AND stat <> 'x' AND stat <> 'X' AND stat <> 'P' ORDER BY acss ASC");
 $num = 1;
-
 while ($row = pg_fetch_object($result)) {
+
+  if (strlen($num) <= 4) {
+    for ($i = strlen($num); $i <= 4; $i++) {
+      $num = "0" . $num;
+    }
+  }
+
 
   $branco = "";
 
@@ -19,7 +24,7 @@ while ($row = pg_fetch_object($result)) {
   $caus = $row->caus;
   $dqit = converteData($row->dqit);
 
-  $dias_sit = "0";
+  $dias_sit = "1";
 
   $emp_estab = recuperaEmpresaEstab($acss, $banco);
   $sit = "";
@@ -38,6 +43,8 @@ while ($row = pg_fetch_object($result)) {
     } else if ($caus == 6) { // Transferencia sem Ônus para Cedente
       $sit = 45;
       $dqit = date('dmY', strtotime(converteData2($row->dqit) . ' + 1 days'));
+      $dqit[0] = "0";
+      $dqit[1] = "1";
     } else if ($caus == 8) { // Falecimento
       $sit = 84;
     } else if ($caus == 9) { // Término de contrato
@@ -46,33 +53,114 @@ while ($row = pg_fetch_object($result)) {
       $sit = "NÃO ENCONTREI";
     }
     $tp_aviso = "3";
-  } else if ($stat == "F" || $stat == "f" || $stat == "S" || $stat == "s" || $stat == "E" || $stat == "e") {
-    $result2 = "SELECT * FROM ds100 WHERE acss = '$acss'";
-    $row2 = pg_fetch_object($result2);
-  } else {
-    $tp_aviso = "";
   }
 
-  echo "altersit" . ";";  // Constante
-  echo $num . ";";                                          // Número do registro
-  echo $emp_estab["empresa"] . ";";                         // Número da empresa
-  echo $emp_estab["estabelecimento"] . ";";                 // Número do estabelecimento
-  echo removeDigito($acss) . ";";                           // Matrícula sem dígito
-  echo $sit . ";";                                          // Código da situação
-  echo $dqit . ";";                                         // Data de início da situação
-  echo $dqit . ";";                                         // Data de término da situação
-  echo $dias_sit . ";";                                     // Dias na situação
-  echo $branco . ";";                                       // Horas na situação
-  echo $branco . ";";                                       // Horas na situação
-  echo $branco . ";";                                       // Horário de início da situação
-  echo $branco . ";";                                       // Horário de término da situação
-  echo $branco . ";";                                       // Código registro no sistema externo
-  echo $branco . ";";                                       // Código da empresa origem/destino
-  echo $branco . ";";                                       // Código do estabelecimento orgiem/destino
-  echo $branco . ";";                                       // Matrícula do funcionário origem/destino
-  echo $tp_aviso . ";";                                     // Tipo aviso prévio
+  if ($sit != "" && $dqit != "") {
 
-  $num ++;
-  echo "<br />";
+    if (dif_data($row2->$ia, $row2->$fa) < 1) {
+      $dias_sit = 1;
+    } else {
+      $dias_sit = dif_data($row2->$ia, $row2->$fa);
+    }
+
+    echo "altersit" . ";";  // Constante
+    echo $num . ";";                                          // Número do registro
+    echo $emp_estab["empresa"] . ";";                         // Número da empresa
+    echo $emp_estab["estabelecimento"] . ";";                 // Número do estabelecimento
+    echo removeDigito($acss) . ";";                           // Matrícula sem dígito
+    echo $sit . ";";                                          // Código da situação
+    echo $dqit . ";";                                         // Data de início da situação
+    echo $dqit . ";";                                         // Data de término da situação
+    echo $dias_sit . ";";                                     // Dias na situação
+    echo $branco . ";";                                       // Horas na situação
+    echo $branco . ";";                                       // Horas na situação
+    echo $branco . ";";                                       // Horário de início da situação
+    echo $branco . ";";                                       // Horário de término da situação
+    echo $branco . ";";                                       // Código registro no sistema externo
+    echo $branco . ";";                                       // Código da empresa origem/destino
+    echo $branco . ";";                                       // Código do estabelecimento orgiem/destino
+    echo $branco . ";";                                       // Matrícula do funcionário origem/destino
+    echo $tp_aviso;                                           // Tipo aviso prévio
+
+    $num ++;
+    echo "<br />";
+  }
+
+
+
+  $result2 = $db->query("SELECT * FROM ds100 WHERE acss = '$acss' ORDER BY acss ASC");
+  while ($row2 = pg_fetch_object($result2)) {
+    for ($cd = 1; $cd <= 20; $cd++) {
+      if ($cd <= 9) {
+        $cd = "0" . $cd;
+      }
+      $var = "cd" . $cd;
+
+      $ia = "ia" . $cd;
+      $fa = "fa" . $cd;
+
+      $sit2 = "";
+      $tp_aviso = "3";
+
+      if ($row2->$var == "02") {
+        $sit2 = "15";
+      } else if ($row2->$var == "03") {
+        $sit2 = "10";
+      } else if ($row2->$var == "04") {
+        $sit2 = "10";
+      } else if ($row2->$var == "05") {
+        $sit2 = "10";
+      } else {
+        $sit2 = "================================================================";
+      }
+
+      if ($row2->$var != "00") {
+        if (strlen($num) <= 4) {
+          for ($i = strlen($num); $i <= 4; $i++) {
+            $num = "0" . $num;
+          }
+        }
+
+
+
+        $dt_term = $row2->$fa;
+
+        if ($dt_term[0] == '9') {
+          $dt_term = date('dmY', strtotime(converteData2($row2->$ia) . ' + 99999 days'));
+          $dias_sit = '99999';
+        } else {
+          $dt_term = converteData($row2->$fa);
+          if (dif_data($row2->$ia, $row2->$fa) < 1) {
+            $dias_sit = 1;
+          } else {
+            $dias_sit = dif_data($row2->$ia, $row2->$fa);
+          }
+        }
+
+
+        echo "altersit" . ";";                                    // Constante
+        echo $num . ";";                                          // Número do registro
+        echo $emp_estab["empresa"] . ";";                         // Número da empresa
+        echo $emp_estab["estabelecimento"] . ";";                 // Número do estabelecimento
+        echo removeDigito($acss) . ";";                           // Matrícula sem dígito
+        echo $sit2 . ";";                                         // Código da situação
+        echo converteData($row2->$ia) . ";";                      // Data de início da situação
+        echo $dt_term . ";";                                      // Data de término da situação
+        echo $dias_sit . ";";                                     // Dias na situação
+        echo $branco . ";";                                       // Horas na situação
+        echo $branco . ";";                                       // Horas na situação
+        echo $branco . ";";                                       // Horário de início da situação
+        echo $branco . ";";                                       // Horário de término da situação
+        echo $branco . ";";                                       // Código registro no sistema externo
+        echo $branco . ";";                                       // Código da empresa origem/destino
+        echo $branco . ";";                                       // Código do estabelecimento orgiem/destino
+        echo $branco . ";";                                       // Matrícula do funcionário origem/destino
+        echo $tp_aviso;                                           // Tipo aviso prévio
+
+        $num ++;
+        echo "<br />";
+      }
+    }
+  }
 }
 ?>

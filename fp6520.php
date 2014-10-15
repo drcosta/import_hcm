@@ -3,7 +3,7 @@
 include_once './lib/connection.php';
 include_once './lib/functions.php';
 
-$banco = "urb";
+$banco = "RUR_RV";
 
 $db = new connection($banco);
 

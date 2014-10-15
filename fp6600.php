@@ -3,20 +3,21 @@
 include_once './lib/connection.php';
 include_once './lib/functions.php';
 
-$banco = "rur";
+$banco = "RUR";
 
 $db = new connection($banco);
 
-$result = $db->query("SELECT * FROM dgs01 WHERE stat <> 'x' ORDER BY acss ASC");
+$result = $db->query("SELECT * FROM dgs01 WHERE stat <> 'X' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
+//$result = $db->query("SELECT * FROM dgs01 WHERE stat = '' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' AND admi > '20140101' ORDER BY acss ASC");
 
 if ($emp_estab["estabelecimento"] == "61") {
   $cat_sal = "2";
-} else if ($banco == "urb" || $banco == "urb_rv") {
+} else if ($banco == "URB" || $banco == "URB_RV") {
   $cat_sal = "1";
-} else if ($banco == "rur" || $banco == "rur_rv") {
+} else if ($banco == "RUR" || $banco == "RUR_RV") {
   $cat_sal = "5";
 }
-
+$c = 1;
 while ($row = pg_fetch_object($result)) {
 
   $acss = $row->acss;
@@ -24,7 +25,7 @@ while ($row = pg_fetch_object($result)) {
   $sexo = $row->sexo;
   $civi = $row->civi;
 
-  $result3 = $db->query("SELECT * FROM ds01c WHERE acss = '$acss'");
+  $result3 = $db->query("SELECT * FROM ds01c WHERE acss = '$acss' AND stat != 'X'");
   $row3 = pg_fetch_object($result3);
 
   $emp_estab = recuperaEmpresaEstab($acss, $banco);
@@ -106,11 +107,11 @@ while ($row = pg_fetch_object($result)) {
   $ctps_num = "";
   $ctps_ser = "";
   if ($nscp != "") {
-    for ($i = 0; $i <= 5; $i++) {
+    for ($i = 0; $i <= 6; $i++) {
       $ctps_num .= $nscp[$i];
     }
 
-    for ($i = 6; $i <= strlen($nscp); $i++) {
+    for ($i = 7; $i <= strlen($nscp); $i++) {
       $ctps_ser .= $nscp[$i];
     }
   }
@@ -129,6 +130,16 @@ while ($row = pg_fetch_object($result)) {
     $cutis = "05";
   }
 
+  $year = $row->dtnc[0] . $row->dtnc[1] . $row->dtnc[2] . $row->dtnc[3];
+
+  if ($year > 2000) {
+    $dt_nasc = converteData($row->dtnc);
+    $dt_nasc[4] = 1;
+    $dt_nasc[5] = 9;
+  } else {
+    $dt_nasc = converteData($row->dtnc);
+  }
+
   echo "funciona" . ";";                                // Constante
   echo "2" . ";";                                       // Tipo de informacao
   echo $emp_estab["empresa"] . ";";                     // Codigo da empresa
@@ -138,7 +149,7 @@ while ($row = pg_fetch_object($result)) {
   echo $cx_postal . ";";                                // Caixa postal do funcionário
   echo $ddd_tel . ";";                                  // DDD Telefone
   echo $tel . ";";                                      // Telefone do funcionário
-  echo converteData($row->dtnc) . ";";                  // Data de admissao
+  echo $dt_nasc . ";";                  // Data de nascimento
   echo $origem . ";";                                   // Origem do funcionario
   echo $pais . ";";                                     // Nacionalidade;
   echo $ano_chegada . ";";                              // Ano de chegada ao País
@@ -187,6 +198,7 @@ while ($row = pg_fetch_object($result)) {
   $tboc = $row->tboc;
   $msal = $row->msal;
   $csal = $row->csal;
+  $vsal = $row->vsal;
   $nbco = $row->nbco;
 
 
@@ -236,11 +248,21 @@ while ($row = pg_fetch_object($result)) {
   $vinculo_fun = "1";                                   // 1 - Com vínculo empregatício
   $t_mao_de_obra = "DIR";                               // DIR - Direta
   $cod_nivel = "0";                                     // Código do nível: 0 - Zé Ruela
-  $sal_autal = str_replace('.', '', $msal + $csal) . "00";
+
   $tab_sal = "N";                                       // N - Não
   $cod_tab_sal = "";
   $fx_tab_sal = "";
   $nv_tab_fx = "";
+
+  if ($msal + $csal > 0) {
+    $sal_autal = str_replace('.', '', $msal + $csal) . "00";
+  } else if ($vsal > 0) {
+    $sal_autal = str_replace('.', '', $vsal) . "00";
+  } else {
+    $sal_autal = '26000';
+  }
+
+
 
   $result2 = $db->query("SELECT * FROM ds041 WHERE acss = '$acss' ORDER BY acss DESC, exer DESC, mesf DESC");
   $row2 = pg_fetch_object($result2);
@@ -257,6 +279,14 @@ while ($row = pg_fetch_object($result)) {
   $result2 = $db->query("SELECT * FROM ds041 WHERE acss = '$acss' AND msal = '$ms' AND csal = '$cs' ORDER BY acss ASC, exer ASC, mesf ASC");
   $row2 = pg_fetch_object($result2);
   $dt_ult_sal = "01" . $row2->mesf . $row2->exer;
+
+  if ($dt_ult_sal == "01") {
+    $dt_ult_sal = converteData($row->admi);
+  }
+
+  if (dif_data($row->admi, $row2->exer . $row2->mesf . "01") < 1) {
+    $dt_ult_sal = converteData($row->admi);
+  }
 
   $motivo_alt = "10";                                   // 10 - Acordo coletivo
 //  $result2 = $db->query("SELECT * FROM ds041 WHERE acss = '$acss' ORDER BY acss ASC, exer ASC, mesf ASC");
@@ -286,7 +316,7 @@ while ($row = pg_fetch_object($result)) {
   $dt_mudanca_inss = "";
 
   $form_pagto = "";
-  if ($banco == "urb" && $nbco == 003) {
+  if ($banco == "URB" && $nbco == 003) {
     $form_pagto = "03";
     $cod_banco = "";
     $cod_agencia = "";
@@ -307,7 +337,7 @@ while ($row = pg_fetch_object($result)) {
     }
   }
 
-  if ($banco == "rur" && $nbco == 002) {
+  if ($banco == "RUR" && $nbco == 002) {
     $form_pagto = "03";
     $cod_banco = "";
     $cod_agencia = "";
@@ -328,7 +358,7 @@ while ($row = pg_fetch_object($result)) {
     }
   }
 
-  if ($banco == "urb_rv" && $nbco == 002) {
+  if ($banco == "URB_RV" && $nbco == 002) {
     $form_pagto = "03";
     $cod_banco = "";
     $cod_agencia = "";
@@ -349,7 +379,11 @@ while ($row = pg_fetch_object($result)) {
     }
   }
 
-  if ($banco == "rur_rv" && $nbco == 002) {
+
+
+
+
+  if ($banco == "RUR_RV" && $nbco == 002) {
     $form_pagto = "03";
     $cod_banco = "";
     $cod_agencia = "";
@@ -368,6 +402,13 @@ while ($row = pg_fetch_object($result)) {
       $cod_agencia = "";
       $forma_pagto_banco = "";
     }
+  }
+
+  if (trim($row->ncta) == "") {
+    $form_pagto = "03";
+    $cod_banco = "";
+    $cod_agencia = "";
+    $forma_pagto_banco = "";
   }
 
   $cod_banco_comp_fgts = "";
@@ -503,7 +544,7 @@ while ($row = pg_fetch_object($result)) {
   $insa = getInsa($acss, $banco);
 
   $nome_pai = trim($row3->npai);
-  $nome_mae = trim($row3->nmae);
+  $nome_mae = str_replace(';', '', trim($row3->nmae));
   $r_cnh = trim($row3->rhab);
 
 
@@ -644,6 +685,12 @@ while ($row = pg_fetch_object($result)) {
   $cod_agen_noc = "0";                                  // Nunca esteve esposto
   $desc_rever_sindi = "S";
   $localidade = "1";
+
+  if ($emp_estab["estabelecimento"] == '14' || $emp_estab["estabelecimento"] == '15') {
+    $localidade = "2";
+  }
+
+
   $cod_fpas = "0";
 
   $cod_sind = getSindicato($row->nsin, $banco);
@@ -797,7 +844,7 @@ while ($row = pg_fetch_object($result)) {
   echo $uso_dtsul . ";";                                // CPF do funcionário substituído
   echo $uso_dtsul;                                      // Matrícula esocial
 
-  echo "<br /><br />";
+  echo "<br />";
 }
 ?>
 

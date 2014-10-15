@@ -11,10 +11,10 @@
  */
 class connection {
 
-  var $db_HOST = "localhost";
+  var $db_HOST = "taurus";
   var $db_PORT = "5432";
   var $db_USER = "postgres";
-  var $db_PASS = "ipanema";
+  var $db_PASS = "pgsql102030";
   var $db = "";
   var $CONST_ERRO = "erro ao conectar no nosso banco";
   var $dbc;
