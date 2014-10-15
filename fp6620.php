@@ -46,6 +46,8 @@ while ($row = pg_fetch_object($result)) {
       $sexo = 1;
     } else if ($sexo == "F") {
       $sexo = 2;
+    } else {
+      $sexo = 2;
     }
 
     if ($pare == "F") {
