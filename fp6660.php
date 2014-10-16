@@ -6,7 +6,10 @@ include_once './lib/functions.php';
 $banco = "RUR";
 
 $db = new connection($banco);
-$result = $db->query("SELECT * FROM dgs01 WHERE ccst NOT LIKE '000%' AND ccst NOT LIKE '005%' AND stat <> 'x' AND stat <> 'X' AND stat <> 'P' ORDER BY acss ASC");
+//$result = $db->query("SELECT * FROM dgs01 WHERE ccst NOT LIKE '000%' AND ccst NOT LIKE '005%' AND stat <> 'x' AND stat <> 'X' AND stat <> 'P' ORDER BY acss ASC");
+
+$result = $db->query("SELECT * FROM dgs01 WHERE (stat = '' OR stat = ' ' OR stat = 'L' OR stat = 'F' OR stat = 'I' OR stat = 'S' OR stat = 'M' OR stat = 'E') AND caus = '0' AND dqit = '00000000' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
+
 $num = 1;
 while ($row = pg_fetch_object($result)) {
 
@@ -83,7 +86,8 @@ while ($row = pg_fetch_object($result)) {
     echo $tp_aviso;                                           // Tipo aviso prévio
 
     $num ++;
-    echo "<br />";
+//    echo "<br />";
+    echo "\n";
   }
 
 
@@ -126,9 +130,10 @@ while ($row = pg_fetch_object($result)) {
         $dt_term = $row2->$fa;
 
         if ($dt_term[0] == '9') {
-          $dt_term = date('dmY', strtotime(converteData2($row2->$ia) . ' + 99999 days'));
-          $dias_sit = '99999';
+          $dt_term = date('dmY', strtotime(converteData2($row2->$ia) . ' + 998 days'));
+          $dias_sit = '999';
         } else {
+
           $dt_term = converteData($row2->$fa);
           if (dif_data($row2->$ia, $row2->$fa) < 1) {
             $dias_sit = 1;
@@ -158,9 +163,11 @@ while ($row = pg_fetch_object($result)) {
         echo $tp_aviso;                                           // Tipo aviso prévio
 
         $num ++;
-        echo "<br />";
+//        echo "<br />";
+        echo "\n";
       }
     }
   }
 }
+echo "\n Fim da script";
 ?>

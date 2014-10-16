@@ -17,7 +17,7 @@ class connection {
   var $db_PASS = "pgsql102030";
   var $db = "";
   var $CONST_ERRO = "erro ao conectar no nosso banco";
-  var $dbc;
+  var $dbc = "";
   var $last_id;
 
   function connection($db) {
@@ -28,7 +28,7 @@ class connection {
   function connect_db() {
     $connect_string = "host=" . $this->db_HOST . " port=" . $this->db_PORT . " user=" . $this->db_USER . " password=" . $this->db_PASS . " dbname=" . $this->db;
     $this->dbc = pg_connect($connect_string);
-    return $dbc;
+    return $this->dbc;
   }
 
   function close_db() {

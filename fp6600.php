@@ -6,9 +6,10 @@ include_once './lib/functions.php';
 $banco = "RUR";
 
 $db = new connection($banco);
-
-$result = $db->query("SELECT * FROM dgs01 WHERE stat <> 'X' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
-//$result = $db->query("SELECT * FROM dgs01 WHERE stat = '' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' AND admi > '20140101' ORDER BY acss ASC");
+// Todos
+//$result = $db->query("SELECT * FROM dgs01 WHERE stat <> 'x' AND stat <> 'X' AND stat <> 'P' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
+//Somente ativos
+$result = $db->query("SELECT * FROM dgs01 WHERE (stat = '' OR stat = ' ' OR stat = 'L' OR stat = 'F' OR stat = 'I' OR stat = 'S' OR stat = 'M' OR stat = 'E') AND caus = '0' AND dqit = '00000000' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
 
 if ($emp_estab["estabelecimento"] == "61") {
   $cat_sal = "2";
@@ -71,7 +72,8 @@ while ($row = pg_fetch_object($result)) {
   echo $tel . ";";                                      // Telefone do funcionário
   echo $num_habilitacao . ";";                          // Número do certificado habilitacao profissional
   echo $uso_dtsul;                                      // Uso interno datasul
-  echo "<br />";
+//  echo "<br />";
+  echo "\n";
   $num++;
   // Fim Tipo 1
   //
@@ -186,7 +188,8 @@ while ($row = pg_fetch_object($result)) {
   echo $dt_vencto_prorrog . ";";                        // Data vencimento prorrogacao
   echo $num_seq_reg . ";";                              // Número sequencial do registro
   echo $cart_saude;                                     // Cartão nacional de saude
-  echo "<br />";
+//  echo "<br />";
+  echo "\n";
 
   // Fim Tipo 2
   //
@@ -492,7 +495,8 @@ while ($row = pg_fetch_object($result)) {
   echo $cod_uni_negocio . ";";                          // Código da unidade de negócio
   echo $indi_cooperado . ";";                           // Indicador cooperado
   echo $cod_sefip;                                      // Código categoria sefip
-  echo "<br />";
+//  echo "<br />";
+  echo "\n";
 
   // Fim Tipo 3
   //
@@ -516,7 +520,7 @@ while ($row = pg_fetch_object($result)) {
   }
 
   $indic_sindic = "N";                                  // N - Não
-  $indic_desc_sindic = "N";                             // N - Não
+  $indic_desc_sindic = "S";                             // S - Sim
   $indi_carga_turnos = "S";                             // S - Sim
   $indic_rec_adian = "N";                               // N - Não
   $indic_rais = "S";                                    // S - Sim
@@ -588,8 +592,8 @@ while ($row = pg_fetch_object($result)) {
   echo $r_cnh . ";";                                    // Carteira de habilitação - número
   echo $num_end_res . ";";                              // Número endereço residencial
   echo $uso_dtsul;                                      // livre para uso futuro
-
-  echo "<br />";
+//  echo "<br />";
+  echo "\n";
 
   // Fim Tipo 4
   //
@@ -668,8 +672,8 @@ while ($row = pg_fetch_object($result)) {
   echo $uso_dtsul . ";";                                // Uso futuro
   echo $uso_dtsul . ";";                                // Uso futuro
   echo $uso_dtsul;                                      // Uso futuro
-
-  echo "<br />";
+//  echo "<br />";
+  echo "\n";
 
   // Fim Tipo 5
   //
@@ -730,8 +734,8 @@ while ($row = pg_fetch_object($result)) {
   echo $cod_fpas . ";";                                 // Código FPAS
   echo $uso_dtsul . ";";                                // Código tomador de serviço
   echo $cod_sind;                                       // Código
-
-  echo "<br />";
+//  echo "<br />";
+  echo "\n";
 
   // Fim Tipo 6
   //
@@ -787,8 +791,8 @@ while ($row = pg_fetch_object($result)) {
   echo $uso_dtsul . ";";                                // CAEPF - Código atividade específica pesso física
   echo $uso_dtsul . ";";                                // Uso interno datasul
   echo $uso_dtsul;                                      // Processo judicial
-
-  echo "<br />";
+//  echo "<br />";
+  echo "\n";
 
   // Fim Tipo 7
   //
@@ -807,8 +811,8 @@ while ($row = pg_fetch_object($result)) {
   echo $uso_dtsul . ";";                                // Número apólice de seguro estágio
   echo $uso_dtsul . ";";                                // Código da PJ que represnta a instituição ensino estágio
   echo $uso_dtsul;                                      // Código da PJ que represnta o agnte integração estágio
-
-  echo "<br />";
+//  echo "<br />";
+  echo "\n";
 
   // Fim Tipo 8
   //
@@ -843,8 +847,9 @@ while ($row = pg_fetch_object($result)) {
   echo $uso_dtsul . ";";                                // Matrícula esocial do funcionário substituído
   echo $uso_dtsul . ";";                                // CPF do funcionário substituído
   echo $uso_dtsul;                                      // Matrícula esocial
-
-  echo "<br />";
+//  echo "<br />";
+  echo "\n";
 }
+echo "\n Fim da script";
 ?>
 
