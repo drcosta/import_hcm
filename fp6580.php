@@ -17,13 +17,14 @@ $db = new connection($banco);
 $result_ori = $db->query("SELECT * FROM dgs01 WHERE (stat = '' OR stat = ' ' OR stat = 'L' OR stat = 'F' OR stat = 'I' OR stat = 'S' OR stat = 'M' OR stat = 'E') AND caus = '0' AND dqit = '00000000' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
 
 $num = 1;
+$t = 0;
 while ($row_ori = pg_fetch_object($result_ori)) {
 
   $acss_ori = $row_ori->acss;
 
   $result = $db->query("SELECT * FROM ds870 WHERE acss = '$acss_ori' ORDER BY acss ASC");
 
-  $t = 0;
+
   while ($row = pg_fetch_object($result)) {
 
     $diasDireito = "";

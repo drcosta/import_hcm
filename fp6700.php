@@ -9,15 +9,16 @@ $db = new connection($banco);
 
 //$result_ori = $db->query("SELECT * FROM dgs01 WHERE stat <> 'x' AND stat <> 'X' AND stat <> 'P' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
 
-$result_ori = $db->query("SELECT * FROM dgs01 WHERE (stat = '' OR stat = ' ' OR stat = 'L' OR stat = 'F' OR stat = 'I' OR stat = 'S' OR stat = 'M' OR stat = 'E') AND caus = '0' AND dqit = '00000000' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
-
+$result_ori = $db->query("SELECT * FROM dgs01 WHERE acss = '00334847'AND (stat = '' OR stat = ' ' OR stat = 'L' OR stat = 'F' OR stat = 'I' OR stat = 'S' OR stat = 'M' OR stat = 'E') AND caus = '0' AND dqit = '00000000' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
+$num = 1;
+$ctrl = 0;
 while ($row_ori = pg_fetch_object($result_ori)) {
 
   $acss_ori = $row_ori->acss;
 
   $result = $db->query("SELECT * FROM ds041 WHERE acss = '$acss_ori' ORDER BY exer ASC, mesf ASC");
-  $num = 1;
-  $ctrl = 0;
+
+
 
   while ($row = pg_fetch_object($result)) {
 
@@ -62,7 +63,7 @@ while ($row_ori = pg_fetch_object($result_ori)) {
       echo "01" . $mes . $ano . ";";                        // Data da alteração do salário
       echo intval($tboc) . ";";                             // Código do cargo
       echo $cod_nivel . ";";                                // Código do nível: 0 - Zé Ruela
-      echo str_replace('.', '', $msal + $csal) . "00" . ";";        // Valor do salário
+      echo str_replace('.', '', number_format($msal + $csal, '4')) . ";";        // Valor do salário
       echo $hrs_padrao . ";";                               // Horas padrao categoria
       echo $hrs_mes . ";";                                  // Horas padrao mesal
       echo "01" . $mes . $ano . ";";                        // Data de vigência

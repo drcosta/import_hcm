@@ -71,7 +71,7 @@ while ($row = pg_fetch_object($result)) {
 
     if ($sfam == "S" && $irrf == "S") {
       $incide = "0001";
-      $sit_sal_fam = "1";
+      $sit_sal_fam = "2";
     } else if ($sfam == "N" && $irrf == "S") {
       $incide = "0002";
       $sit_sal_fam = "3";
