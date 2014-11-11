@@ -1,17 +1,20 @@
 <?php
 
-include_once './lib/connection.php';
-include_once './lib/functions.php';
+include_once '../lib/connection.php';
+include_once '../lib/functions.php';
 
-$bancos = array('RUR', 'RUR_RV');
+
 $num = 1;
-foreach ($bancos as $banco) {
+$ler = file('./men.csv');
+foreach ($ler as $linha) {
 
+  $explode = explode(';', $linha);
+  list($acss, $banco) = $explode;
+  $acss = trim($acss);
+  $banco = trim($banco);
   $db = new connection($banco);
 
-//$result_ori = $db->query("SELECT * FROM dgs01 WHERE stat <> 'x' AND stat <> 'X' AND stat <> 'P' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
-
-  $result_ori = $db->query("SELECT * FROM dgs01 WHERE (stat = '' OR stat = ' ' OR stat = 'L' OR stat = 'F' OR stat = 'I' OR stat = 'S' OR stat = 'M' OR stat = 'E') AND caus = '0' AND dqit = '00000000' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
+  $result_ori = $db->query("SELECT * FROM dgs01 WHERE acss = '$acss' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
 
   $ctrl = 0;
   while ($row_ori = pg_fetch_object($result_ori)) {
@@ -80,7 +83,7 @@ foreach ($bancos as $banco) {
         echo $dt_alt_sal . ";";                               // Data da alteração do salário
         echo intval($tboc) . ";";                             // Código do cargo
         echo $cod_nivel . ";";                                // Código do nível: 0 - Zé Ruela
-        echo str_replace('.', '', number_format($msal + $csal, '4')) . ";";        // Valor do salário
+        echo str_replace('.', '', number_format($msal + $csal, '4', '', '')) . ";";        // Valor do salário
         echo $hrs_padrao . ";";                               // Horas padrao categoria
         echo $hrs_mes . ";";                                  // Horas padrao mesal
         echo $dt_alt_sal . ";";                               // Data de vigência
@@ -93,14 +96,14 @@ foreach ($bancos as $banco) {
         echo $tp_cargo . ";";                                 // Tipo de cargo: 1 - Cargo
         echo $funcao . ";";                                   // Função: 1 - Ativo
         echo $termino;                                        // Termino
-//        echo "<br />";
-        echo "\n";
+        echo "<br />";
+//        echo "\n";
         $num ++;
         $ctrl = $msal;
       }
     }
   }
 }
-//echo "<br /> Fim da script";
-echo "\n Fim da script";
+echo "<br /> Fim da script";
+//echo "\n Fim da script";
 ?>

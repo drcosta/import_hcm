@@ -1,21 +1,20 @@
 <?php
 
-include_once './lib/connection.php';
-include_once './lib/functions.php';
+include_once '../lib/connection.php';
+include_once '../lib/functions.php';
 
-$bancos = array('RUR', 'RUR_RV');
 
-foreach ($bancos as $banco) {
-
+$num = 1;
+$ler = file('./men.csv');
+foreach ($ler as $linha) {
+  $explode = explode(';', $linha);
+  list($acss, $banco) = $explode;
+  $acss = trim($acss);
+  $banco = trim($banco);
   $db = new connection($banco);
 
-// Roda todas as tabelas
-// Vai demorar muito
-  $num = 1;
 
-//$result_ori = $db->query("SELECT * FROM dgs01 WHERE stat <> 'x' AND stat <> 'X' AND stat <> 'P' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
-
-  $result_ori = $db->query("SELECT * FROM dgs01 WHERE (stat = '' OR stat = ' ' OR stat = 'L' OR stat = 'F' OR stat = 'I' OR stat = 'S' OR stat = 'M' OR stat = 'E') AND caus = '0' AND dqit = '00000000' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
+  $result_ori = $db->query("SELECT * FROM dgs01 WHERE acss = '$acss' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
 
   while ($row_ori = pg_fetch_object($result_ori)) {
 
@@ -73,8 +72,8 @@ foreach ($bancos as $banco) {
             echo ";";                                        // Adicionais em horas para férias
             echo $vlr . ";";     // Adicionais em valor para férias
             echo ";;;;";
-//            echo "<br />";
-            echo "\n";
+            echo "<br />";
+//            echo "\n";
             $num++;
           }
         }
@@ -82,6 +81,6 @@ foreach ($bancos as $banco) {
     }
   }
 }
-//echo "<br /> Fim da script";
-echo "\n Fim da script";
+echo "<br /> Fim da script";
+//echo "\n Fim da script";
 ?>

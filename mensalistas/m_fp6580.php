@@ -6,19 +6,21 @@
  * Utiliza a tabela ds870 que contem as informações do período aquisitivo
  *
  */
-include_once './lib/connection.php';
-include_once './lib/functions.php';
-$bancos = array('RUR', 'RUR_RV');
+include_once '../lib/connection.php';
+include_once '../lib/functions.php';
 
-foreach ($bancos as $banco) {
-
+$num = 1;
+$ler = file('./men.csv');
+foreach ($ler as $linha) {
+  $explode = explode(';', $linha);
+  list($acss, $banco) = $explode;
+  $acss = trim($acss);
+  $banco = trim($banco);
   $db = new connection($banco);
 
-//$result_ori = $db->query("SELECT * FROM dgs01 WHERE stat <> 'x' AND stat <> 'X' AND stat <> 'P' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
+  $result_ori = $db->query("SELECT * FROM dgs01 WHERE acss = '$acss' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
 
-  $result_ori = $db->query("SELECT * FROM dgs01 WHERE (stat = '' OR stat = ' ' OR stat = 'L' OR stat = 'F' OR stat = 'I' OR stat = 'S' OR stat = 'M' OR stat = 'E') AND caus = '0' AND dqit = '00000000' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
 
-  $num = 1;
   $t = 0;
 
   while ($row_ori = pg_fetch_object($result_ori)) {
@@ -109,8 +111,8 @@ foreach ($bancos as $banco) {
         echo $diasLinceca . ";";                              // Histórico da 1ª Concessão - Dias linceça
         echo ";;;;;;;;;;;;;;;;";
 
-//        echo "<br />";
-        echo "\n";
+        echo "<br />";
+//        echo "\n";
         $num++;
 
 
@@ -131,8 +133,8 @@ foreach ($bancos as $banco) {
           echo '' . ";";                              // Histórico da 1ª Concessão - Dias linceça
           echo ";;;;;;;;;;;;;;;;";
 
-//          echo "<br />";
-          echo "\n";
+          echo "<br />";
+//          echo "\n";
           $num++;
         }
       } else if ($total == 2) {
@@ -160,8 +162,8 @@ foreach ($bancos as $banco) {
           echo $diasAbono . ";";                                // Histórico da 2ª Concessão - Dias abono
           echo $diasLinceca . ";";                              // Histórico da 2ª Concessão - Dias linceça
           echo ";;;;;;;;;;;;";
-//          echo "<br />";
-          echo "\n";
+          echo "<br />";
+//          echo "\n";
           $num++;
           $t = 0;
         }
@@ -196,8 +198,8 @@ foreach ($bancos as $banco) {
           echo $diasAbono . ";";                                // Histórico da 3ª Concessão - Dias abono
           echo $diasLinceca . ";";                              // Histórico da 3ª Concessão - Dias linceça
           echo ";;;;;;;;";
-//          echo "<br />";
-          echo "\n";
+          echo "<br />";
+//          echo "\n";
           $num++;
           $t = 0;
         }
@@ -206,6 +208,6 @@ foreach ($bancos as $banco) {
     }
   }
 }
-//echo "<br /> Fim da script";
-echo "\n Fim da script";
+echo "<br /> Fim da script";
+//echo "\n Fim da script";
 ?>
