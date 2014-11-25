@@ -1,0 +1,57 @@
+RUR;;;;;;;;;
+;;;;;;;;;
+010;Adiantamento de 13-Sal;N;S;189;<=mês10,1;=11,4;<=mês10,9;=11,1;416;X;
+002;INSS Sobre Salario;N;S;187+188;1;9;511;X;
+016;INSS Sobre Ferias;N;S;187+188;1;9;511;x;R$ 589,69
+012;INSS Sobre 13-Salario;N;S;013;3;9;512;X;R$ 7.371,14
+154;Encargos de FGTS;N;S;187;1;9;531;;
+145;FGTS do 13-Salario;N;S;189;<=mês10,1;=11,4;=12,3;<=mês10,9;=11,1;=12,9;532;X;
+174;FGTS DE FERIAS;N;S;188;1;9;554;;
+160;Encargos GRPS Empresa;N;S;144;1;9;E01;;
+148;PREVIDENCIA DO 13-S;N;S;147;3;9;E02;X;
+163;PREV EMP FERIAS;N;S;144;1;9;E03;;
+152;INSS desc fora EMPRESA;N;S;151;1;9;H04;;
+Verba VRH;Descrição;Horas;Valor;Base;Tipo folha;Parcela;Verba HCM;;
+;;;;;;;;;
+RUR_RV;;;;;;;;;
+;;;;;;;;;
+002;I N S S;N;S;187+188;1;9;511;1;1
+010;Adiantamento de 13-Sal;N;S;189;<=mês10,1;=11,4;<=mês10,9;=11,1;416;0;0
+012;INSS S/13-SALARIO;N;S;013;3;9;512;1;1
+016;PREV S/VALOR FERIAS;N;S;187+188;1;9;511;0;0
+145;FGTS 13 SALARIO;N;S;189;<=mês10,1;=11,4;=12,3;<=mês10,9;=11,1;=12,9;532;1;1
+148;PREVIDENCIA DO 13-S;N;S;147;3;9;E02;0;0
+152;INSS desc fora EMPRESA;N;S;151;1;9;H04;0;0
+154;Encargos de FGTS;N;S;187;1;9;531;0;0
+160;Encargos GRPS Empresa;N;S;144;1;9;E01;0;0
+163;PREV EMP FERIAS;N;S;144;1;9;E03;0;0
+174;FGTS DE FERIAS;N;S;188;1;9;554;0;0
+;;;;;;;;;
+URB;;;;;;;;;
+;;;;;;;;;
+002;INSS Sobre Salario;N;S;187+188;1;9;511;1;1
+010;Adiantamento de 13-Sal;N;S;189;<=mês10,1;=11,4;<=mês10,9;=11,1;416;1;1
+012;INSS Sobre 13-Salario;N;S;013;3;9;512;1;1
+016;INSS Sobre Ferias;N;S;187+188;1;9;511;1;1
+145;FGTS do 13-Salario;N;S;189;<=mês10,1;=11,4;=12,3;<=mês10,9;=11,1;=12,9;532;1;1
+148;PREVIDENCIA DO 13-S;N;S;147;1;9;E02;1;1
+152;INSS desc fora EMPRESA;N;S;151;1;9;H04;1;1
+154;Encargos de FGTS;N;S;187;1;9;531;1;1
+160;Encargos GRPS Empresa;N;S;144;1;9;E01;1;1
+163;PREV EMP FERIAS;N;S;144;1;9;E03;1;1
+174;FGTS DE FERIAS;N;S;188;1;9;554;1;1
+192;Adiantamento de 13-Sal;N;S;189;<=mês10,1;=11,4;<=mês10,9;=11,1;416;0;0
+;;;;;;;;;
+URB_RV;;;;;;;;;
+;;;;;;;;;
+002;INSS Sobre Salario;N;S;187+188;1;9;511;1;1
+010;Adiantamento de 13-Sal;N;S;189;<=mês10,1;=11,4;<=mês10,9;=11,1;416;1;1
+012;INSS S/13-SALARIO;N;S;013;3;9;512;1;1
+016;PREV S/VALOR FERIAS;N;S;187+188;1;9;511;1;1
+145;FGTS 13 SALARIO;N;S;189;<=mês10,1;=11,4;=12,3;<=mês10,9;=11,1;=12,9;532;1;1
+148;PREVIDENCIA DO 13-S;N;S;147;3;9;E02;1;1
+152;INSS desc fora EMPRESA;N;S;151;1;9;H04;1;1
+154;Encargos de FGTS;N;S;187;1;9;531;1;1
+160;Encargos GRPS Empresa;N;S;144;1;9;E01;1;1
+163;PREV EMP FERIAS;N;S;144;1;9;E03;1;1
+174;FGTS DE FERIAS;N;S;188;1;9;554;1;1

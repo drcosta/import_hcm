@@ -1,5 +1,972 @@
 <?php
 
+function info_verba($evento, $banco) {
+
+  $info = "";
+
+  if ($banco == "RUR") {
+    if ($evento == "011") {
+      $info["horas"] = "S";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "205") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "261") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "457") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "632") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "098") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "419") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "3";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "171") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "371") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "3";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "262") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "351") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "562") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "256") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "420") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "563") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "3";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "035") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "580") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "355") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "052") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "100") {
+      $info["horas"] = "S";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "176") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "027") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "070") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "351") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "103") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "070") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "245") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "221") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "471") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "405") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "496") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "224") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "253") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "201") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "017") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "376") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "557") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "525") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "356") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "524") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "377") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "523") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "180") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "485") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "400") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "801") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "490") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "381") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "197") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "216") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "290") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "108") {
+      $info["horas"] = "S";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "356") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "479") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H01") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "472") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "233") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "508") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "294") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "455") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "098") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "098") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "452") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "558") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "602") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "092") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "351") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "216") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "216") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "190") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "230") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "234") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "216") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "330") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "478") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "216") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "492") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "633") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "634") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "205") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "469") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "227") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "602") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "193") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "482") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "355") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "468") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "487") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "479") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "403") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "484") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "557") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "098") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "527") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "527") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "606") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "273") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "474") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "233") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "527") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "023") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "524") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "026") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "257") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "100") {
+      $info["horas"] = "S";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "527") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "541") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "021") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "017") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "030") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "468") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "190") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "190") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "098") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "495") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "406") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "494") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "099") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "022") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "216") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "479") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "332") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "400") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "486") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "023") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "026") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H02") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "024") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "024") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "216") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "191") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "488") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H03") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "493") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "801") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "601") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "601") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "601") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "520") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "601") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "580") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "940") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H05") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "603") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "654") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H06") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "E01") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "570") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "E02") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "3";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "507") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "507") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "507") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "507") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H07") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H08") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "999") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H09") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H10") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "900") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "159") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "222") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "374") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "601") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "601") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "E02") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "3";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "E02") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "544") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "549") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "3";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "552") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "404") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "401") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "2";
+      $info["nparcela"] = "1 ";
+    } else if ($evento == "H11") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "222") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "102") {
+      $info["horas"] = "S";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "196") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "003") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "005") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "222") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "459") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "216") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "098") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "452") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "202") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "264") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "400") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "216") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "098") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "216") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "193") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H12") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "583") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "354") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "488") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "582") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H13") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "488") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "351") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "488") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H14") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H15") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "290") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "504") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "106") {
+      $info["horas"] = "S";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "034") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "488") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "351") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "450") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H16") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "550") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "194") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "052") {
+      $info["horas"] = "S";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H17") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "356") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "487") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H18") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "098") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "488") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H19") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "331") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "216") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "632") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "098") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "192") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "483") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "349") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H20") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "099") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "H21") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "403") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "494") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "037") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "028") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "271") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "360") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "402") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    } else if ($evento == "481") {
+      $info["horas"] = "N";
+      $info["tfolha"] = "1";
+      $info["nparcela"] = "9 ";
+    }
+  }
+//
+  else if ($banco == "RUR_RV") {
+
+  }
+//
+  else if ($banco == "URB") {
+
+  }
+//
+  else if ($banco == "URB_RV") {
+
+  }
+
+  return $info;
+}
+
 function de_para_verbas($banco, $verba) {
 
   $new_verb = "";
@@ -520,7 +1487,9 @@ function de_para_verbas($banco, $verba) {
     } else if ($verba == "249") {
       $new_verb = "H21";
     }
-  } else if ($banco == "RUR_RV") {
+  }
+//
+  else if ($banco == "RUR_RV") {
     if ($verba == "049") {
       $new_verb = "003";
     } else if ($verba == "001") {
@@ -952,13 +1921,15 @@ function de_para_verbas($banco, $verba) {
     } else if ($verba == "176") {
       $new_verb = "H27";
     }
-  } else if ($banco == "URB") {
+  }
+//
+  else if ($banco == "URB") {
     if ($verba == "027") {
       $new_verb = "003";
     } else if ($verba == "038") {
       $new_verb = "005";
     } else if ($verba == "001") {
-      $new_verb = "011";
+      $new_verb = "001";
     } else if ($verba == "206") {
       $new_verb = "017";
     } else if ($verba == "193") {
@@ -1410,11 +2381,13 @@ function de_para_verbas($banco, $verba) {
     } else if ($verba == "220") {
       $new_verb = "H31";
     }
-  } else if ($banco == "URB_RV") {
+  }
+//
+  else if ($banco == "URB_RV") {
     if ($verba == "049") {
       $new_verb = "003";
     } else if ($verba == "001") {
-      $new_verb = "011";
+      $new_verb = "001";
     } else if ($verba == "041") {
       $new_verb = "017";
     } else if ($verba == "025") {

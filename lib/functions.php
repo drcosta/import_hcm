@@ -183,6 +183,25 @@ function removeDigito($acesso) {
   return $mat;
 }
 
+function removeDigito2($acesso, $banco) {
+  $mat = "";
+  for ($i = 1; $i <= strlen($acesso) - 2; $i++) {
+    $mat .= $acesso[$i];
+  }
+
+  if ($banco == "URB") {
+    $mat = "96" . $mat;
+  } else if ($banco == "URB_RV") {
+    $mat = "97" . $mat;
+  } else if ($banco == "RUR") {
+    $mat = "98" . $mat;
+  } else if ($banco == "RUR_RV") {
+    $mat = "99" . $mat;
+  }
+
+  return $mat;
+}
+
 function getDV($acesso) {
   $dv = "";
   $tam = strlen($acesso) - 1;
