@@ -142,6 +142,10 @@ foreach ($bancos as $banco) {
           $sinal = "";
 
 
+          if ($base == "") {
+            $base = '00';
+          }
+
           $result2 = $db->query("SELECT * FROM ds041 WHERE acss = '$acss' AND exer = '$ano' AND mesf = '$mes'");
           $row2 = pg_fetch_object($result2);
           $sal_total = $row2->msal + $row2->csal;
