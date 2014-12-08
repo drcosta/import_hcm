@@ -11,7 +11,7 @@
  */
 class connection {
 
-  var $db_HOST = "localhost";
+  var $db_HOST = "127.0.0.1";
   var $db_PORT = "5432";
   var $db_USER = "postgres";
   var $db_PASS = "pgsql102030";
@@ -36,7 +36,7 @@ class connection {
   }
 
   function query($sql) {
-    $sts = pg_query($this->dbc, $sql) or die($this->CONST_ERRO . pg_last_error());
+    $sts = pg_query($this->dbc, $sql) or die($sql . "\n\n" . $this->CONST_ERRO . "\n\n" . pg_last_error());
     return($sts);
   }
 

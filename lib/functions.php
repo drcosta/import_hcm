@@ -183,6 +183,26 @@ function removeDigito($acesso) {
   return $mat;
 }
 
+function zero_esq($info, $qtd) {
+  $qtd = $qtd - 1;
+  if (strlen($info) <= $qtd) {
+    for ($i = strlen($info); $i <= $qtd; $i++) {
+      $info = "0" . $info;
+    }
+  }
+
+  return $info;
+}
+
+function removeDigito3($acesso) {
+  $mat = "";
+  for ($i = 0; $i <= strlen($acesso) - 2; $i++) {
+    $mat .= $acesso[$i];
+  }
+
+  return $mat;
+}
+
 function removeDigito2($acesso, $banco) {
   $mat = "";
   for ($i = 1; $i <= strlen($acesso) - 2; $i++) {
@@ -445,4 +465,28 @@ function getSindicato($nsin, $banco) {
   }
 
   return $sind;
+}
+
+function evento_novo($evento, $banco) {
+  $mat = array();
+  $ler = file('verbas_' . $banco . '.csv');
+  foreach ($ler as $linha) {
+    $explode = explode(';', $linha);
+    list($vrh, $horas, $base, $tfolha, $parcela, $hcm) = $explode;
+
+    if ($evento == $vrh) {
+
+      $mat["valid"] = true;
+      $mat["horas"] = trim($horas);
+      $mat["base"] = trim($base);
+      $mat["tfolha"] = trim($tfolha);
+      $mat["parcela"] = trim($parcela);
+      $mat["hcm"] = trim($hcm);
+      break;
+    } else {
+      $mat["valid"] = false;
+    }
+  }
+
+  return $mat;
 }

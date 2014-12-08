@@ -12,7 +12,7 @@ foreach ($bancos as $banco) {
 
   $db = new connection($banco);
 
-  for ($i = 1; $i <= 12; $i++) {
+  for ($i = 1; $i <= 9; $i++) {
 
     if ($i <= 9) {
       $mes = "0" . $i;
@@ -45,7 +45,6 @@ foreach ($bancos as $banco) {
         $cdnn = $row->cdnn;
         $hors = $row->hors;
         $valo = $row->valo;
-        $cp02 = $row->cp02;
 
         $emp_estab = recuperaEmpresaEstab($acss, $banco);
 
@@ -69,7 +68,7 @@ foreach ($bancos as $banco) {
         if ($horas == 'S') {
           $horas = $hors;
         } else {
-          $horas = '';
+          $horas = '0';
         }
 
         if ($base == '') {
@@ -97,17 +96,16 @@ foreach ($bancos as $banco) {
         $sal_hora = $sal_atual / 220;
 
 
-        $result2 = $db->query("SELECT * FROM $tabela2 WHERE empresa = '$empresa' AND estabelecimento = '$estabelecimento' matricula = '$matricula' exer = '$exer' AND evento = '$hcm'  ORDER BY acss ASC ");
+        $result2 = $db->query("SELECT * FROM $tabela2 WHERE empresa = '$empresa' AND estabelecimento = '$estabelecimento' AND matricula = '$matricula' AND ano = '$exer' AND evento = '$hcm' ");
 
         if (pg_num_rows($result2) == 0) {
 
           $db->query("INSERT INTO $tabela2 (empresa,estabelecimento,matricula,ano,data_pag,tfolha,parcela,evento,horas,base,valor,sal_hora,sal_atual) VALUES ('$empresa','$estabelecimento','$matricula','$exer','$dt_pag','$tfolha','$parcela','$hcm','$horas','$base','$valo', '$sal_hora','$sal_atual')");
         } else {
 //          parei aqui
-          $horas2 = $hors + $row2->hors;
-          $valo = $valo + $row2->valo;
-          $db->query("UPDATE $tabela2 SET hors = '$hors', valo = '$valo' WHERE exer = '$exer' AND mesf = '$mesf' AND acss = '$acss' AND cdnn = '$hcm'");
-          echo "UP" . $banco . " ; " . $exer . " ; " . $mesf . " ; " . $acss . " ; " . $hcm . " ; " . $stat . " ; " . $stan . " ; " . $refx . " ; " . $hors . " ; " . $valo . " ; " . $cp02 . "\n";
+          $horas += $row2->horas;
+          $valo += $row2->valor;
+          $db->query("UPDATE $tabela2 SET horas = '$horas', valor = '$valo' WHERE ano = '$exer' AND matricula = '$matricula'");
         }
       }
     }
