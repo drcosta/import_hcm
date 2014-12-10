@@ -4,8 +4,8 @@ include_once './lib/connection.php';
 include_once './lib/functions.php';
 include_once './lib/verbas.php';
 
-$bancos = array('URB');
-
+$bancos = array('URB_RV');
+$arquivo = null;
 foreach ($bancos as $banco) {
 
   $db = new connection($banco);
@@ -33,6 +33,7 @@ foreach ($bancos as $banco) {
 
         $empresa = null;
         $estabelecimento = null;
+        $matricula = null;
         $ano = null;
         $tipo_folha = null;
         $parcela = null;
@@ -59,6 +60,7 @@ foreach ($bancos as $banco) {
           $emp_estab = recuperaEmpresaEstab($acss, $banco);
           $empresa = $emp_estab["empresa"];
           $estabelecimento = $emp_estab["estabelecimento"];
+          $matricula = removeDigito($acss);
           $tipo_folha = $controle["tfolha"];
           $parcela = $controle["parcela"];
           $evento = $controle["hcm"];
@@ -137,7 +139,7 @@ foreach ($bancos as $banco) {
             $dt_pag .= $ano + 1;
           }
 
-          if ($evento_vrh == '012' || $evento_vrh == '185' || $evento_vrh == '010' || $evento_vrh == '145' || ($banco == 'URB' && $evento_vrh == '192')) {
+          if ($evento_vrh == '012' || $evento_vrh == '013' || $evento_vrh == '185' || $evento_vrh == '010' || $evento_vrh == '145' || ($banco == 'URB' && $evento_vrh == '192') || ($banco == 'URB_RV' && $evento == 'E02')) {
             if ($mes <= 10) {
               $tipo_folha = '1';
               $parcela = '9';
@@ -150,31 +152,47 @@ foreach ($bancos as $banco) {
             }
           }
 
-          echo "movtoclc;";                             // Constante
-          echo zero_esq($num, 5) . ";";                 // Número do registro
-          echo $empresa . ";";                          // Número da empresa
-          echo $estabelecimento . ";";                  // Número do estabelecimento
-          echo removeDigito($acss) . ";";               // Matrícula sem dígito
-          echo $mes . ";";                              // Mês de referencia
-          echo $ano . ";";                              // Ano de referencia
-          echo $dt_pag . ";";                           // Data de pagamento
-          echo $tipo_folha . ";";                       // Tipo de folha
-          echo $parcela . ";";                          // Número da parcela
-          echo $evento . ";";                           // Código do evento
-          echo $horas . ";";                            // Quantidade
-          echo $base . ";";                             // Base de calculo
-          echo $valor . ";";                            // Valor
-          echo $sinal . ";";                            // Sinal do valor
-          echo $sal_hora . ";";                         // Salario hora do funcionário
-          echo $sal_total;                              // Salario atual do funcionario
-          echo "<br />";
+          if ((removeDigito($acss) == '67' || removeDigito($acss) == '1925') && ($ano . $mes <= 201403)) {
+            $estabelecimento = 12;
+          }
+
+          if ($matricula == '00000183' && $banco == 'URB_RV') {
+            $matricula = '00000173';
+          }
+
+          $arquivo .= "movtoclc;";                             // Constante
+          $arquivo .= zero_esq($num, 5) . ";";                 // Número do registro
+          $arquivo .= $empresa . ";";                          // Número da empresa
+          $arquivo .= $estabelecimento . ";";                  // Número do estabelecimento
+          $arquivo .= $matricula . ";";                        // Matrícula sem dígito
+          $arquivo .= $mes . ";";                              // Mês de referencia
+          $arquivo .= $ano . ";";                              // Ano de referencia
+          $arquivo .= $dt_pag . ";";                           // Data de pagamento
+          $arquivo .= $tipo_folha . ";";                       // Tipo de folha
+          $arquivo .= $parcela . ";";                          // Número da parcela
+          $arquivo .= $evento . ";";                           // Código do evento
+          $arquivo .= $horas . ";";                            // Quantidade
+          $arquivo .= $base . ";";                             // Base de calculo
+          $arquivo .= $valor . ";";                            // Valor
+          $arquivo .= $sinal . ";";                            // Sinal do valor
+          $arquivo .= $sal_hora . ";";                         // Salario hora do funcionário
+          $arquivo .= $sal_total;                              // Salario atual do funcionario
+          $arquivo .= "\n";
 //        echo "\n";
           $num++;
         }
       }
     }
   }
+  unlink("./fp6540-" . $banco . ".txt");
+  fclose($ponteiro);
+
+  $fp = fopen("./fp6540-" . $banco . ".txt", "a");
+  $escreve = fwrite($fp, $arquivo);
+  fclose($fp);
 }
 
-echo "<br /> Fim da script";
-//echo "\n Fim da script";
+
+
+//echo "<br /> Fim da script";
+echo "\n Fim da script";
