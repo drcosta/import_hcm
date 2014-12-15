@@ -4,7 +4,7 @@ include_once './lib/connection.php';
 include_once './lib/functions.php';
 include_once './lib/verbas.php';
 
-$bancos = array('URB_RV');
+$bancos = array('RUR', 'RUR_RV', 'URB', 'URB_RV');
 $arquivo = null;
 foreach ($bancos as $banco) {
 
@@ -184,10 +184,10 @@ foreach ($bancos as $banco) {
       }
     }
   }
-  unlink("./fp6540-" . $banco . ".txt");
+  unlink("./files/fp6540-2-" . $banco . ".lst");
   fclose($ponteiro);
 
-  $fp = fopen("./fp6540-" . $banco . ".txt", "a");
+  $fp = fopen("./files/fp6540-2-" . $banco . ".lst", "a");
   $escreve = fwrite($fp, $arquivo);
   fclose($fp);
 }

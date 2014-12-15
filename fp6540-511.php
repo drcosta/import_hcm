@@ -142,6 +142,13 @@ foreach ($bancos as $banco) {
           $valor = zero_esq(number_format($valor, 2, '', ''), 11);
           $base = zero_esq(number_format($base, 2, '', ''), 11);
 
+          if ($matricula == '00000067' || $matricula == '00001925' && ($ano . $mes <= 201403)) {
+            $estabelecimento = 12;
+          }
+          
+          if ($matricula == '00000183' && $banco == 'URB_RV') {
+            $matricula = '00000173';
+          }
 
           $arquivo .= "movtoclc;";                             // Constante
           $arquivo .= zero_esq($num, 5) . ";";                 // Número do registro
@@ -169,8 +176,8 @@ foreach ($bancos as $banco) {
       }
     }
   }
-  unlink("./fp6540-511-" . $banco . ".txt");
-  $fp = fopen("./fp6540-511-" . $banco . ".txt", "a");
+  unlink("./files/fp6540-511-" . $banco . ".lst");
+  $fp = fopen("./files/fp6540-511-" . $banco . ".lst", "a");
   $escreve = fwrite($fp, $arquivo);
   fclose($fp);
 }
