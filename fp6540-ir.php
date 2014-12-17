@@ -5,44 +5,18 @@ include_once './lib/functions.php';
 include_once './lib/verbas.php';
 include_once './lib/base_ir.php';
 
-$bancos = array('URB_RV');
+$bancos = array('RUR', 'RUR_RV', 'URB', 'URB_RV');
+
 
 foreach ($bancos as $banco) {
-  $arquivo = null;
   $db = new connection($banco);
 
   $num = 1;
-
+  $arquivo = null;
   $result_ori = $db->query("SELECT * FROM dgs01 WHERE (stat = '' OR stat = ' ' OR stat = 'L' OR stat = 'F' OR stat = 'I' OR stat = 'S' OR stat = 'M' OR stat = 'E') AND caus = '0' AND dqit = '00000000' AND ccst NOT LIKE '005%' AND ccst NOT LIKE '000%' ORDER BY acss ASC");
 
   while ($row_ori = pg_fetch_object($result_ori)) {
-
     $acss_ori = $row_ori->acss;
-
-    $emp_estab = null;
-    $empresa = null;
-    $estabelecimento = null;
-    $matricula = null;
-    $ano = null;
-    $tipo_folha = null;
-    $parcela = null;
-    $evento = null;
-    $horas = null;
-    $base = null;
-    $valor = null;
-    $sal_hora = null;
-    $sal_total = null;
-    $dt_pag = null;
-    $sinal = null;
-    $sal_hora = null;
-    $sal_total = null;
-
-    $emp_estab = recuperaEmpresaEstab($acss_ori, $banco);
-    $empresa = $emp_estab["empresa"];
-    $estabelecimento = $emp_estab["estabelecimento"];
-    $matricula = removeDigito($acss_ori);
-    $tipo_folha = 1;
-    $parcela = 9;
 
     for ($i = 1; $i <= 12; $i++) {
       if ($i <= 9) {
@@ -53,7 +27,67 @@ foreach ($bancos as $banco) {
         $tabela = "ds040" . $i;
       }
 
-      for ($ano = 1987; $ano <= 2015; $ano++) {
+      $result = $db->query("SELECT * FROM $tabela WHERE acss = '$acss_ori' AND (cdnn = '005' OR cdnn = '017' OR cdnn = '020') ORDER BY acss ASC ");
+
+      while ($row = pg_fetch_object($result)) {
+        $empresa = null;
+        $estabelecimento = null;
+        $matricula = null;
+        $ano = null;
+        $tipo_folha = null;
+        $parcela = null;
+        $evento = null;
+        $horas = null;
+        $base = null;
+        $valor = null;
+        $sal_hora = null;
+        $sal_total = null;
+        $dt_pag = null;
+        $eve_144 = null;
+        $eve_002 = null;
+        $sinal = null;
+
+        $acss = $row->acss;
+        $ano = $row->exer;
+        $valor = $row->valo;
+
+        $evento_vrh = trim($row->cdnn);
+
+        $emp_estab = recuperaEmpresaEstab($acss, $banco);
+        $empresa = $emp_estab["empresa"];
+        $estabelecimento = $emp_estab["estabelecimento"];
+        $matricula = removeDigito($acss);
+
+        $tipo_folha = 1;
+        $parcela = 9;
+
+        if ($row->cdnn == '005') {
+          $evento = 561;
+        } else if ($row->cdnn == '017') {
+          $evento = 562;
+        } else if ($row->cdnn == '020') {
+          $evento = 563;
+        }
+
+        $result_144 = $db->query("SELECT * FROM $tabela WHERE acss = '$acss_ori' AND cdnn = '144' AND exer = '$ano' AND mesf = '$mes' ");
+        $row_144 = pg_fetch_object($result_144);
+        $eve_144 = $row_144->valo;
+
+        $result_002 = $db->query("SELECT * FROM $tabela WHERE acss = '$acss_ori' AND cdnn = '002' AND exer = '$ano' AND mesf = '$mes' ");
+        $row_002 = pg_fetch_object($result_002);
+        $eve_002 = $row_002->valo;
+
+        $result_d = $db->query("SELECT * FROM ds01d WHERE acss = '$acss_ori' AND (irrf = 'S' OR irrf = 'P')");
+        $dep_ir = pg_num_rows($result_d);
+
+        $base = $eve_144 - $eve_002 - ($dep_ir * base_ir($mes, $ano));
+
+        if ($base < 0) {
+          $base *= -1;
+        }
+
+        $valor = zero_esq(number_format($row->valo, 2, '', ''), 11);
+        $base = zero_esq(number_format($base, 2, '', ''), 11);
 
         if ($i <= 8) {
           $dt_pag = "010";
@@ -72,79 +106,51 @@ foreach ($bancos as $banco) {
           $dt_pag .= $ano + 1;
         }
 
-        $valor = 0;
-        $base = 0;
-        $result = $db->query("SELECT * FROM $tabela WHERE exer = '$ano' AND acss = '$acss_ori' AND (cdnn = '005' OR cdnn = '017' OR cdnn = '020')");
-
-        if (pg_num_rows($result) >= 1) {
-
-          while ($row = pg_fetch_object($result)) {
-
-            $result_d = $db->query("SELECT * FROM ds01d WHERE acss = '$acss_ori' AND (irrf = 'S' OR irrf = 'P')");
-            $dep_ir = pg_num_rows($result_d);
-
-
-            if ($row->cdnn == '005') {
-              $evento = '561';
-            } else if ($row->cdnn == '017') {
-              $evento = '562';
-            } else if ($row->cdnn == '020') {
-              $evento = '563';
-            }
-
-            $valor = $row->valo;
-
-            $result2 = $db->query("SELECT * FROM ds041 WHERE acss = '$acss_ori' AND exer = '$ano' AND mesf = '$mes'");
-            $row2 = pg_fetch_object($result2);
-            $sal_hora = zero_esq(number_format(($row2->msal + $row2->csal) / 220, 3, '', ''), 10);
-            $sal_total = zero_esq(number_format($row2->msal + $row2->csal, 3, '', ''), 10);
-
-            $valor = zero_esq(number_format($valor, 2, '', ''), 11);
-            $base = zero_esq(number_format($base, 2, '', ''), 11);
-
-            if ($matricula == '00000067' || $matricula == '00001925' && ($ano . $mes <= 201403)) {
-              $estabelecimento = 12;
-            }
-
-            if ($matricula == '00000183' && $banco == 'URB_RV') {
-              $matricula = '00000173';
-            }
-
-            $arquivo .= "movtoclc;";                             // Constante
-            $arquivo .= zero_esq($num, 5) . ";";                 // Número do registro
-            $arquivo .= $empresa . ";";                          // Número da empresa
-            $arquivo .= $estabelecimento . ";";                  // Número do estabelecimento
-            $arquivo .= $matricula . ";";                        // Matrícula sem dígito
-            $arquivo .= $mes . ";";                              // Mês de referencia
-            $arquivo .= $ano . ";";                              // Ano de referencia
-            $arquivo .= $dt_pag . ";";                           // Data de pagamento
-            $arquivo .= $tipo_folha . ";";                       // Tipo de folha
-            $arquivo .= $parcela . ";";                          // Número da parcela
-            $arquivo .= $evento . ";";                           // Código do evento
-            $arquivo .= $horas . ";";                            // Quantidade
-            $arquivo .= $base . ";";                             // Base de calculo
-            $arquivo .= $valor . ";";                            // Valor
-            $arquivo .= $sinal . ";";                            // Sinal do valor
-            $arquivo .= $sal_hora . ";";                         // Salario hora do funcionário
-            $arquivo .= $sal_total;                              // Salario atual do funcionario
-            $arquivo .= "\n";
-
-            $arquivo .= "<br />";
-            echo $arquivo;
-
-            $num++;
-          }
+        if ((removeDigito($acss) == '67' || removeDigito($acss) == '1925') && ($ano . $mes <= 201403)) {
+          $estabelecimento = 12;
         }
+
+        if ($matricula == '00000183' && $banco == 'URB_RV') {
+          $matricula = '00000173';
+        }
+
+        $result2 = $db->query("SELECT * FROM ds041 WHERE acss = '$acss' AND exer = '$ano' AND mesf = '$mes'");
+        $row2 = pg_fetch_object($result2);
+        $sal_hora = zero_esq(number_format(($row2->msal + $row2->csal) / 220, 3, '', ''), 10);
+        $sal_total = zero_esq(number_format($row2->msal + $row2->csal, 3, '', ''), 10);
+
+        $arquivo .= "movtoclc;";                             // Constante
+        $arquivo .= zero_esq($num, 5) . ";";                 // Número do registro
+        $arquivo .= $empresa . ";";                          // Número da empresa
+        $arquivo .= $estabelecimento . ";";                  // Número do estabelecimento
+        $arquivo .= $matricula . ";";                        // Matrícula sem dígito
+        $arquivo .= $mes . ";";                              // Mês de referencia
+        $arquivo .= $ano . ";";                              // Ano de referencia
+        $arquivo .= $dt_pag . ";";                           // Data de pagamento
+        $arquivo .= $tipo_folha . ";";                       // Tipo de folha
+        $arquivo .= $parcela . ";";                          // Número da parcela
+        $arquivo .= $evento . ";";                           // Código do evento
+        $arquivo .= $horas . ";";                            // Quantidade
+        $arquivo .= $base . ";";                             // Base de calculo
+        $arquivo .= $valor . ";";                            // Valor
+        $arquivo .= $sinal . ";";                            // Sinal do valor
+        $arquivo .= $sal_hora . ";";                         // Salario hora do funcionário
+        $arquivo .= $sal_total;                              // Salario atual do funcionario
+        $arquivo .= "\n";
+//        echo "\n";
+        $num++;
       }
     }
   }
-//  unlink("./files/fp6540-ir-" . $banco . ".lst");
-//  $fp = fopen("./files/fp6540-ir-" . $banco . ".lst", "a");
-//  $escreve = fwrite($fp, $arquivo);
-//  fclose($fp);
+
+  unlink("./files/fp6540-ir-" . $banco . ".lst");
+  fclose($ponteiro);
+
+  $fp = fopen("./files/fp6540-ir-" . $banco . ".lst", "a");
+  $escreve = fwrite($fp, $arquivo);
+  fclose($fp);
 }
 
 
 
-//echo "<br /> Fim da script";
 echo "\n Fim da script";
