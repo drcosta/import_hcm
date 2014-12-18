@@ -5,7 +5,7 @@ include_once './lib/functions.php';
 include_once './lib/verbas.php';
 include_once './lib/base_ir.php';
 
-$bancos = array('URB');
+$bancos = array('RUR', 'RUR_RV', 'URB', 'URB_RV');
 
 
 foreach ($bancos as $banco) {
@@ -124,8 +124,6 @@ foreach ($bancos as $banco) {
           }
 
           $base = $eve_187 - $eve_002 - $dep_ir;
-
-          echo $acss_ori . " - " . $ano . " - " . $mes . " - " . $eve_187 . " - " . $eve_002 . " - " . $dep_ir . " \n";
         } else if ($row->cdnn == '017') { // Férias
           $evento = 562;
 

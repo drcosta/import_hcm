@@ -139,7 +139,7 @@ foreach ($bancos as $banco) {
             $dt_pag .= $ano + 1;
           }
 
-          if ($evento_vrh == '012' || $evento_vrh == '013' || $evento_vrh == '185' || $evento_vrh == '010' || $evento_vrh == '145' || ($banco == 'URB' && $evento_vrh == '192') || ($banco == 'URB_RV' && $evento == 'E02')) {
+          if ($evento_vrh == '012' || $evento_vrh == '164' || $evento_vrh == '183' || $evento_vrh == '013' || $evento_vrh == '185' || $evento_vrh == '010' || $evento_vrh == '145' || ($banco == 'URB' && $evento_vrh == '192') || ($banco == 'URB_RV' && $evento == 'E02')) {
             if ($mes <= 10) {
               $tipo_folha = '1';
               $parcela = '9';

@@ -102,10 +102,8 @@ foreach ($bancos as $banco) {
             if (pg_num_rows($result) == 1) {
               if (trim($row->valo) > 0) {
                 $base = trim($row->valo);
-                echo "\n\n\n\n\n\n144 + " . $base;
               } else {
                 $base = (trim($row->valo) * -1);
-                echo "\n\n\n\n\n\n144 - " . $base;
               }
             } else {
               $result = $db->query("SELECT * FROM $tabela WHERE exer = '$ano' AND acss = '$acss_ori' AND cdnn = '150'");
@@ -113,10 +111,8 @@ foreach ($bancos as $banco) {
               if (pg_num_rows($result) == 1) {
                 if (trim($row->valo) > 0) {
                   $base = trim($row->valo);
-                  echo "\n\n\n\n\n\n150 + " . $base;
                 } else {
                   $base = (trim($row->valo) * -1);
-                  echo "\n\n\n\n\n\n150 -" . $base;
                 }
               } else {
                 $result = $db->query("SELECT * FROM $tabela WHERE exer = '$ano' AND acss = '$acss_ori' AND cdnn = '173'");
@@ -124,10 +120,8 @@ foreach ($bancos as $banco) {
                 if (pg_num_rows($result) == 1) {
                   if (trim($row->valo) > 0) {
                     $base = trim($row->valo);
-                    echo "\n\n\n\n\n\n173 + " . $base;
                   } else {
                     $base = (trim($row->valo) * -1);
-                    echo "\n\n\n\n\n\n173 - " . $base;
                   }
                 }
               }
@@ -145,7 +139,7 @@ foreach ($bancos as $banco) {
           if ($matricula == '00000067' || $matricula == '00001925' && ($ano . $mes <= 201403)) {
             $estabelecimento = 12;
           }
-          
+
           if ($matricula == '00000183' && $banco == 'URB_RV') {
             $matricula = '00000173';
           }
