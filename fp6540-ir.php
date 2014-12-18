@@ -5,7 +5,7 @@ include_once './lib/functions.php';
 include_once './lib/verbas.php';
 include_once './lib/base_ir.php';
 
-$bancos = array('RUR', 'RUR_RV', 'URB', 'URB_RV');
+$bancos = array('URB');
 
 
 foreach ($bancos as $banco) {
@@ -43,9 +43,15 @@ foreach ($bancos as $banco) {
         $sal_hora = null;
         $sal_total = null;
         $dt_pag = null;
-        $eve_144 = null;
+        $eve_187 = null;
         $eve_002 = null;
+        $eve_188 = null;
+        $eve_016 = null;
+        $eve_070 = null;
+        $eve_147 = null;
         $sinal = null;
+        $dep_ir = null;
+        $periodo = null;
 
         $acss = $row->acss;
         $ano = $row->exer;
@@ -61,26 +67,111 @@ foreach ($bancos as $banco) {
         $tipo_folha = 1;
         $parcela = 9;
 
-        if ($row->cdnn == '005') {
-          $evento = 561;
-        } else if ($row->cdnn == '017') {
-          $evento = 562;
-        } else if ($row->cdnn == '020') {
-          $evento = 563;
+        if ($i <= 8) {
+          $dt_pag = "010";
+          $dt_pag .= $mes + 1;
+          $dt_pag .= $ano;
+          $periodo = $ano . $mes + 1;
+        } else if ($i == 9) {
+          $dt_pag = "01";
+          $dt_pag .= $mes + 1;
+          $dt_pag .= $ano;
+          $periodo = $ano . $mes + 1;
+        } else if ($i <= 11) {
+          $dt_pag = "01";
+          $dt_pag .= $mes + 1;
+          $dt_pag .= $ano;
+          $periodo = $ano . $mes + 1;
+        } else {
+          $dt_pag = "0101";
+          $dt_pag .= $ano + 1;
+          $periodo = $ano + 1 . "01";
         }
 
-        $result_144 = $db->query("SELECT * FROM $tabela WHERE acss = '$acss_ori' AND cdnn = '144' AND exer = '$ano' AND mesf = '$mes' ");
-        $row_144 = pg_fetch_object($result_144);
-        $eve_144 = $row_144->valo;
-
-        $result_002 = $db->query("SELECT * FROM $tabela WHERE acss = '$acss_ori' AND cdnn = '002' AND exer = '$ano' AND mesf = '$mes' ");
-        $row_002 = pg_fetch_object($result_002);
-        $eve_002 = $row_002->valo;
 
         $result_d = $db->query("SELECT * FROM ds01d WHERE acss = '$acss_ori' AND (irrf = 'S' OR irrf = 'P')");
-        $dep_ir = pg_num_rows($result_d);
+        $dep_ir = 0;
 
-        $base = $eve_144 - $eve_002 - ($dep_ir * base_ir($mes, $ano));
+        if (pg_num_rows($result_d) >= 1) {
+          while ($row_d = pg_fetch_object($result_d)) {
+            $dtnc = $row_d->dtnc;
+            $corrente = $ano . $mes . "01";
+            if (($row_d->pare == "F") && ($dtnc <= $corrente) && (dif_data($dtnc, $corrente) / 365 < 24)) {
+              $dep_ir ++;
+            } else if (($row_d->pare != "F") && ($dtnc <= $corrente)) {
+              $dep_ir ++;
+            }
+          }
+        }
+
+        $dep_ir = $dep_ir * base_ir_2($periodo);
+
+        if ($row->cdnn == '005') { // Normal
+          $evento = 561;
+
+          $result_002 = $db->query("SELECT * FROM $tabela WHERE acss = '$acss_ori' AND cdnn = '002' AND exer = '$ano' AND mesf = '$mes' ");
+          $row_002 = pg_fetch_object($result_002);
+          $eve_002 = $row_002->valo;
+          if ($eve_002 < 0) {
+            $eve_002 *= -1;
+          }
+
+          $result_187 = $db->query("SELECT * FROM $tabela WHERE acss = '$acss_ori' AND cdnn = '187' AND exer = '$ano' AND mesf = '$mes' ");
+          $row_187 = pg_fetch_object($result_187);
+          $eve_187 = $row_187->valo;
+          if ($eve_187 < 0) {
+            $eve_187 *= -1;
+          }
+
+          $base = $eve_187 - $eve_002 - $dep_ir;
+
+          echo $acss_ori . " - " . $ano . " - " . $mes . " - " . $eve_187 . " - " . $eve_002 . " - " . $dep_ir . " \n";
+        } else if ($row->cdnn == '017') { // Férias
+          $evento = 562;
+
+          $result_016 = $db->query("SELECT * FROM $tabela WHERE acss = '$acss_ori' AND cdnn = '016' AND exer = '$ano' AND mesf = '$mes' ");
+          $row_016 = pg_fetch_object($result_016);
+          $eve_016 = $row_016->valo;
+          if ($eve_016 < 0) {
+            $eve_016 *= -1;
+          }
+
+          $result_188 = $db->query("SELECT * FROM $tabela WHERE acss = '$acss_ori' AND cdnn = '188' AND exer = '$ano' AND mesf = '$mes' ");
+          $row_188 = pg_fetch_object($result_188);
+          $eve_188 = $row_188->valo;
+
+          if ($eve_188 < 0) {
+            $eve_188 *= -1;
+          }
+
+          $result_070 = $db->query("SELECT * FROM $tabela WHERE acss = '$acss_ori' AND cdnn = '070' AND exer = '$ano' AND mesf = '$mes' ");
+          $row_070 = pg_fetch_object($result_070);
+          $eve_070 = $row_070->valo;
+
+          if ($eve_070 < 0) {
+            $eve_070 *= -1;
+          }
+
+          $base = $eve_188 - $eve_016 - $dep_ir + $eve_070;
+        } else if ($row->cdnn == '020') { // 13º Salário
+          $evento = 563;
+
+          $result_147 = $db->query("SELECT * FROM $tabela WHERE acss = '$acss_ori' AND cdnn = '147' AND exer = '$ano' AND mesf = '$mes' ");
+          $row_147 = pg_fetch_object($result_147);
+          $eve_147 = $row_147->valo;
+          if ($eve_147 < 0) {
+            $eve_147 *= -1;
+          }
+
+          $result_012 = $db->query("SELECT * FROM $tabela WHERE acss = '$acss_ori' AND cdnn = '012' AND exer = '$ano' AND mesf = '$mes' ");
+          $row_012 = pg_fetch_object($result_012);
+          $eve_012 = $row_012->valo;
+          if ($eve_012 < 0) {
+            $eve_012 *= -1;
+          }
+
+          $base = $eve_147 - $eve_012 - $dep_ir;
+        }
 
         if ($base < 0) {
           $base *= -1;
@@ -89,29 +180,16 @@ foreach ($bancos as $banco) {
         $valor = zero_esq(number_format($row->valo, 2, '', ''), 11);
         $base = zero_esq(number_format($base, 2, '', ''), 11);
 
-        if ($i <= 8) {
-          $dt_pag = "010";
-          $dt_pag .= $mes + 1;
-          $dt_pag .= $ano;
-        } else if ($i == 9) {
-          $dt_pag = "01";
-          $dt_pag .= $mes + 1;
-          $dt_pag .= $ano;
-        } else if ($i <= 11) {
-          $dt_pag = "01";
-          $dt_pag .= $mes + 1;
-          $dt_pag .= $ano;
-        } else {
-          $dt_pag = "0101";
-          $dt_pag .= $ano + 1;
-        }
-
         if ((removeDigito($acss) == '67' || removeDigito($acss) == '1925') && ($ano . $mes <= 201403)) {
           $estabelecimento = 12;
         }
 
         if ($matricula == '00000183' && $banco == 'URB_RV') {
           $matricula = '00000173';
+        }
+
+        if ($evento == 563) {
+          $tipo_folha = 3;
         }
 
         $result2 = $db->query("SELECT * FROM ds041 WHERE acss = '$acss' AND exer = '$ano' AND mesf = '$mes'");

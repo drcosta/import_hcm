@@ -11,7 +11,8 @@
  */
 class connection {
 
-  var $db_HOST = "127.0.0.1";
+//  var $db_HOST = "127.0.0.1";
+  var $db_HOST = "192.168.1.244";
   var $db_PORT = "5432";
   var $db_USER = "postgres";
   var $db_PASS = "pgsql102030";
